@@ -9,9 +9,9 @@ import { clientConfig } from "@/lib/config";
 const convex = new ConvexReactClient(clientConfig.convex.url);
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
-  return (
-    <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-      {children}
-    </ConvexProviderWithClerk>
-  );
+    return (
+        <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+            {children}
+        </ConvexProviderWithClerk>
+    );
 }
