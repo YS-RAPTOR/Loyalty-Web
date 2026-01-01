@@ -38,7 +38,9 @@ import {
     Ticket,
     Send,
     Pencil,
+    QrCode,
 } from "lucide-react";
+import Link from "next/link";
 import { resendQrAction } from "@/lib/actions/customer";
 import { formatDate } from "@/lib/date";
 import { type OfferRule, type OfferEffect, getOfferDescription } from "@/lib/types/offer";
@@ -479,16 +481,26 @@ export default function CustomerPage({ params }: PageProps) {
                         </div>
                     </div>
 
-                    {canResendQr && (
-                        <>
-                            <Separator />
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                                <div>
-                                    <p className="text-sm font-medium">QR Code Link</p>
-                                    <p className="text-xs text-stone-500">
-                                        Send the customer their QR code via SMS
-                                    </p>
-                                </div>
+                    <Separator />
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div>
+                            <p className="text-sm font-medium">QR Code</p>
+                            <p className="text-xs text-stone-500">
+                                View or send the customer their QR code
+                            </p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                render={<Link href={`/qr?id=${customerId}`} />}
+                                className="w-full sm:w-auto"
+                                nativeButton={false}
+                            >
+                                <QrCode className="mr-2 h-4 w-4" />
+                                View QR Code
+                            </Button>
+                            {canResendQr && (
                                 <Button
                                     variant="outline"
                                     size="sm"
@@ -499,9 +511,9 @@ export default function CustomerPage({ params }: PageProps) {
                                     <Send className="mr-2 h-4 w-4" />
                                     {isResendingQr ? "Sending..." : "Resend QR Link"}
                                 </Button>
-                            </div>
-                        </>
-                    )}
+                            )}
+                        </div>
+                    </div>
                 </CardContent>
             </Card>
 

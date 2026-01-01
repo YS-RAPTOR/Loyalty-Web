@@ -6,6 +6,7 @@ import {
     hasMinRoles,
     type UserRole,
 } from "@/lib/roles";
+import { clientConfig } from "@/lib/config";
 
 export type ClerkUser = {
     id: string;
@@ -140,6 +141,7 @@ export async function inviteUser(email: string, role: UserRole): Promise<{
         await client.invitations.createInvitation({
             emailAddress: email,
             publicMetadata: { role },
+            redirectUrl: `${clientConfig.appUrl}/admin`,
             ignoreExisting: false,
         });
 
