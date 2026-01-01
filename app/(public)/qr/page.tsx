@@ -3,7 +3,9 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { convex } from "@/lib/convex";
 import { clientConfig } from "@/lib/config";
+import { branding } from "@/lib/branding";
 import { QrDisplay } from "./qr-display";
+import { AlertTriangle, Ban } from "lucide-react";
 
 type Props = {
     searchParams: Promise<{ id?: string }>;
@@ -16,32 +18,32 @@ export async function generateMetadata({
 
     if (!id) {
         return {
-            title: "QR Code - Loyalty Program",
-            description: "Your loyalty program QR code",
+            title: branding.meta.qrTitle,
+            description: branding.meta.qrDescription,
         };
     }
 
     const baseUrl = clientConfig.appUrl;
 
     return {
-        title: "Your QR Code - Loyalty Program",
-        description: "Scan this QR code at checkout to earn rewards",
+        title: branding.meta.qrWithIdTitle,
+        description: branding.meta.qrWithIdDescription,
         openGraph: {
-            title: "Your QR Code - Loyalty Program",
-            description: "Scan this QR code at checkout to earn rewards",
+            title: branding.meta.qrWithIdTitle,
+            description: branding.meta.qrWithIdDescription,
             images: [
                 {
                     url: `${baseUrl}/api/qr?id=${id}&size=og`,
                     width: 600,
                     height: 600,
-                    alt: "Loyalty Program QR Code",
+                    alt: branding.meta.qrOgAlt,
                 },
             ],
         },
         twitter: {
             card: "summary_large_image",
-            title: "Your QR Code - Loyalty Program",
-            description: "Scan this QR code at checkout to earn rewards",
+            title: branding.meta.qrWithIdTitle,
+            description: branding.meta.qrWithIdDescription,
             images: [`${baseUrl}/api/qr?id=${id}&size=og`],
         },
     };
@@ -52,13 +54,20 @@ export default async function QrPage({ searchParams }: Props) {
 
     if (!id) {
         return (
-            <main className="container mx-auto flex min-h-screen items-center justify-center px-4 py-8">
-                <div className="text-center">
-                    <h1 className="text-2xl font-bold">Invalid QR Link</h1>
-                    <p className="mt-2 text-muted-foreground">
-                        No customer ID provided. Please use the link sent to
-                        your phone.
-                    </p>
+            <main className="min-h-screen bg-gradient-to-b from-muted/50 to-background">
+                <div className="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-12">
+                    <div className="w-full max-w-md rounded-2xl border bg-card p-8 text-center shadow-lg">
+                        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
+                            <AlertTriangle className="h-8 w-8 text-destructive" />
+                        </div>
+                        <h1 className="text-2xl font-bold tracking-tight">
+                            Invalid QR Link
+                        </h1>
+                        <p className="mt-3 text-muted-foreground">
+                            No customer ID provided. Please use the link sent to
+                            your phone.
+                        </p>
+                    </div>
                 </div>
             </main>
         );
@@ -76,21 +85,30 @@ export default async function QrPage({ searchParams }: Props) {
 
     if (!customer) {
         return (
-            <main className="container mx-auto flex min-h-screen items-center justify-center px-4 py-8">
-                <div className="text-center">
-                    <h1 className="text-2xl font-bold">Customer Not Found</h1>
-                    <p className="mt-2 text-muted-foreground">
-                        This QR code is invalid or the customer no longer
-                        exists.
-                    </p>
+            <main className="min-h-screen bg-gradient-to-b from-muted/50 to-background">
+                <div className="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-12">
+                    <div className="w-full max-w-md rounded-2xl border bg-card p-8 text-center shadow-lg">
+                        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
+                            <Ban className="h-8 w-8 text-destructive" />
+                        </div>
+                        <h1 className="text-2xl font-bold tracking-tight">
+                            Customer Not Found
+                        </h1>
+                        <p className="mt-3 text-muted-foreground">
+                            This QR code is invalid or the customer no longer
+                            exists.
+                        </p>
+                    </div>
                 </div>
             </main>
         );
     }
 
     return (
-        <main className="container mx-auto flex min-h-screen items-center justify-center px-4 py-8">
-            <QrDisplay customerId={id} />
+        <main className="min-h-screen bg-gradient-to-b from-muted/50 to-background">
+            <div className="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-12">
+                <QrDisplay customerId={id} />
+            </div>
         </main>
     );
 }

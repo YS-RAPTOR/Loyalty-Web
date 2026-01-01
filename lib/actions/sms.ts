@@ -4,6 +4,7 @@ import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { convex } from "@/lib/convex";
 import { sendSms } from "@/lib/twilio";
+import { branding } from "@/lib/branding";
 import { buildQrUrl } from "./utils";
 
 /**
@@ -15,7 +16,7 @@ export async function sendWelcomeSms(
     firstName: string,
 ): Promise<{ success: boolean; error?: string }> {
     const qrUrl = buildQrUrl(customerId);
-    const message = `Welcome to our loyalty program, ${firstName}! Your QR code is ready: ${qrUrl}`;
+    const message = branding.sms.welcome(firstName, qrUrl);
 
     try {
         const result = await sendSms(phoneE164, message);
@@ -43,7 +44,7 @@ export async function sendQrLinkSms(
     phoneE164: string,
 ): Promise<{ success: boolean; error?: string }> {
     const qrUrl = buildQrUrl(customerId);
-    const message = `Your loyalty QR code is ready! View it here: ${qrUrl}`;
+    const message = branding.sms.qrLink(qrUrl);
 
     try {
         const result = await sendSms(phoneE164, message);

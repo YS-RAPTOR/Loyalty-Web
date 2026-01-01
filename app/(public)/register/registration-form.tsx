@@ -7,13 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
     InputOTP,
     InputOTPGroup,
     InputOTPSlot,
@@ -31,6 +24,8 @@ import {
     createCustomerAction,
 } from "@/lib/actions/registration";
 import { registrationSchema } from "@/lib/validations/customer";
+import { branding } from "@/lib/branding";
+import { Gift, Smartphone, UserCheck, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 
 type Step = "info" | "otp" | "already-registered";
 
@@ -153,49 +148,58 @@ export function RegistrationForm() {
 
     if (step === "already-registered") {
         return (
-            <Card className="w-full max-w-md mx-auto">
-                <CardHeader>
-                    <CardTitle>Already Registered</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-muted-foreground">
-                        This phone number is already registered in our loyalty
-                        program.
-                    </p>
-                </CardContent>
-                <CardFooter>
-                    <Button
-                        variant="ghost"
-                        className="w-full"
-                        onClick={() => {
-                            setPhone("");
-                            setStep("info");
-                            setError("");
-                            setFieldErrors({});
-                        }}
-                    >
-                        Back
-                    </Button>
-                </CardFooter>
-            </Card>
+            <div className="w-full max-w-md">
+                <div className="rounded-2xl border bg-card p-8 shadow-lg">
+                    <div className="text-center">
+                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                            <UserCheck className="h-6 w-6 text-primary" />
+                        </div>
+                        <h1 className="text-2xl font-bold tracking-tight">
+                            Already Registered
+                        </h1>
+                        <p className="mt-3 text-muted-foreground">
+                            {branding.program.alreadyRegisteredMessage}
+                        </p>
+                    </div>
+                    <div className="mt-8">
+                        <Button
+                            variant="outline"
+                            className="w-full"
+                            onClick={() => {
+                                setPhone("");
+                                setStep("info");
+                                setError("");
+                                setFieldErrors({});
+                            }}
+                        >
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Back
+                        </Button>
+                    </div>
+                </div>
+            </div>
         );
     }
 
     if (step === "otp") {
         return (
-            <Card className="w-full max-w-md mx-auto">
-                <CardHeader>
-                    <CardTitle>Verify Your Phone</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <form id="otp-form" onSubmit={handleVerifyOtp}>
-                        <FieldGroup>
-                            <FieldDescription>
+            <div className="w-full max-w-md">
+                <div className="rounded-2xl border bg-card p-8 shadow-lg">
+                    <div className="text-center">
+                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                            <Smartphone className="h-6 w-6 text-primary" />
+                        </div>
+                        <h1 className="text-2xl font-bold tracking-tight">
+                            Verify Your Phone
+                        </h1>
+                    </div>
+                    <form id="otp-form" onSubmit={handleVerifyOtp} className="mt-6">
+                        <FieldGroup className="items-center">
+                            <FieldDescription className="text-center">
                                 We sent a verification code to {phone}
                             </FieldDescription>
 
-                            <Field>
-                                <FieldLabel>Verification Code</FieldLabel>
+                            <div className="flex justify-center">
                                 <InputOTP
                                     maxLength={6}
                                     value={otpCode}
@@ -210,47 +214,62 @@ export function RegistrationForm() {
                                         <InputOTPSlot index={5} />
                                     </InputOTPGroup>
                                 </InputOTP>
-                            </Field>
+                            </div>
 
-                            {error && <FieldError>{error}</FieldError>}
+                            {error && <FieldError className="text-center">{error}</FieldError>}
                         </FieldGroup>
                     </form>
-                </CardContent>
-                <CardFooter className="flex-col gap-2">
-                    <Button
-                        type="submit"
-                        form="otp-form"
-                        className="w-full"
-                        disabled={isLoading || otpCode.length !== 6}
-                    >
-                        {isLoading
-                            ? "Verifying and Registering..."
-                            : "Verify & Register"}
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        className="w-full"
-                        onClick={() => {
-                            setStep("info");
-                            setOtpCode("");
-                            setError("");
-                        }}
-                    >
-                        Back
-                    </Button>
-                </CardFooter>
-            </Card>
+                    <div className="mt-8 space-y-3">
+                        <Button
+                            type="submit"
+                            form="otp-form"
+                            className="w-full"
+                            size="lg"
+                            disabled={isLoading || otpCode.length !== 6}
+                        >
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Verifying...
+                                </>
+                            ) : (
+                                "Verify & Register"
+                            )}
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            className="w-full"
+                            onClick={() => {
+                                setStep("info");
+                                setOtpCode("");
+                                setError("");
+                            }}
+                        >
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Back
+                        </Button>
+                    </div>
+                </div>
+            </div>
         );
     }
 
     return (
-        <Card className="w-full max-w-md mx-auto">
-            <CardHeader>
-                <CardTitle>Join Our Loyalty Program</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <form id="registration-form" onSubmit={handleSendOtp}>
+        <div className="w-full max-w-md">
+            <div className="rounded-2xl border bg-card p-8 shadow-lg">
+                <div className="text-center">
+                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                        <Gift className="h-6 w-6 text-primary" />
+                    </div>
+                    <h1 className="text-2xl font-bold tracking-tight">
+                        {branding.program.joinHeading}
+                    </h1>
+                    <p className="mt-2 text-muted-foreground">
+                        {branding.program.joinSubtitle}
+                    </p>
+                </div>
+                <form id="registration-form" onSubmit={handleSendOtp} className="mt-6">
                     <FieldGroup>
                         <Field>
                             <FieldLabel htmlFor="phone">Phone Number *</FieldLabel>
@@ -342,7 +361,7 @@ export function RegistrationForm() {
                                 I accept the{" "}
                                 <Link
                                     href="/terms"
-                                    className="text-primary underline"
+                                    className="text-primary underline hover:text-primary/80"
                                 >
                                     Terms and Conditions
                                 </Link>
@@ -353,17 +372,28 @@ export function RegistrationForm() {
                         {error && <FieldError>{error}</FieldError>}
                     </FieldGroup>
                 </form>
-            </CardContent>
-            <CardFooter>
-                <Button
-                    type="submit"
-                    form="registration-form"
-                    className="w-full"
-                    disabled={isLoading}
-                >
-                    {isLoading ? "Sending Code..." : "Continue"}
-                </Button>
-            </CardFooter>
-        </Card>
+                <div className="mt-8">
+                    <Button
+                        type="submit"
+                        form="registration-form"
+                        className="w-full"
+                        size="lg"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Sending Code...
+                            </>
+                        ) : (
+                            <>
+                                Continue
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                            </>
+                        )}
+                    </Button>
+                </div>
+            </div>
+        </div>
     );
 }

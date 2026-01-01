@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { branding } from "@/lib/branding";
+import { Gift, Download } from "lucide-react";
 
 type Props = {
     customerId: string;
@@ -12,38 +13,51 @@ export function QrDisplay({ customerId }: Props) {
     const qrUrl = `/api/qr?id=${customerId}`;
 
     return (
-        <Card className="w-full max-w-md mx-auto text-center">
-            <CardHeader>
-                <CardTitle>Your Loyalty QR Code</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-                <p className="text-sm text-muted-foreground">
-                    Show this QR code at checkout to earn rewards
-                </p>
-
-                <div className="flex justify-center">
-                    <Image
-                        src={qrUrl}
-                        alt="Your Loyalty QR Code"
-                        width={300}
-                        height={300}
-                        className="rounded-lg border"
-                        unoptimized
-                    />
+        <div className="w-full max-w-md">
+            <div className="rounded-2xl border bg-card p-8 shadow-lg">
+                <div className="text-center">
+                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                        <Gift className="h-6 w-6 text-primary" />
+                    </div>
+                    <h1 className="text-2xl font-bold tracking-tight">
+                        {branding.qr.heading}
+                    </h1>
+                    <p className="mt-2 text-muted-foreground">
+                        {branding.qr.subtitle}
+                    </p>
                 </div>
 
-                <Button
-                    render={<a href={qrUrl} download="loyalty-qr-code.png" />}
-                    nativeButton={false}
-                    className="w-full"
-                >
-                    Download QR Code
-                </Button>
+                <div className="mt-8 flex justify-center">
+                    <div className="overflow-hidden rounded-xl border-2 border-dashed border-muted-foreground/25 bg-white p-4">
+                        <Image
+                            src={qrUrl}
+                            alt={branding.qr.altText}
+                            width={280}
+                            height={280}
+                            className="rounded-lg"
+                            unoptimized
+                        />
+                    </div>
+                </div>
 
-                <p className="text-xs text-muted-foreground">
-                    Save this QR code to your phone for easy access
+                <div className="mt-8 space-y-3">
+                    <Button
+                        render={
+                            <a href={qrUrl} download={branding.qr.downloadFilename} />
+                        }
+                        nativeButton={false}
+                        className="w-full"
+                        size="lg"
+                    >
+                        <Download className="mr-2 h-5 w-5" />
+                        Download QR Code
+                    </Button>
+                </div>
+
+                <p className="mt-6 text-center text-sm text-muted-foreground">
+                    {branding.qr.saveInstruction}
                 </p>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     );
 }

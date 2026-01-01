@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Html5Qrcode, Html5QrcodeScannerState } from "html5-qrcode";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Camera, CameraOff, RotateCcw, AlertCircle } from "lucide-react";
+import { Camera, CameraOff, RotateCcw, AlertCircle, Check } from "lucide-react";
 
 type ScannerStatus = "idle" | "starting" | "scanning" | "stopped" | "success" | "error";
 
@@ -245,9 +245,7 @@ export function QrScanner() {
                             <div className="absolute inset-0 flex items-center justify-center bg-green-50/90">
                                 <div className="text-center space-y-2">
                                     <div className="mx-auto w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
+                                        <Check className="w-6 h-6 text-green-600" />
                                     </div>
                                     <p className="text-sm font-medium text-green-700">QR Code Scanned!</p>
                                     <p className="text-xs text-green-600">Redirecting to customer...</p>

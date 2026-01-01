@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { getRoleFromPublicMetadata, hasMinRoles, roleDisplayNames } from "@/lib/roles";
+import { branding } from "@/lib/branding";
 import { Toaster } from "@/components/ui/sonner";
 import { AdminNav, AdminNavMobile } from "./_components/admin-nav";
 import { Loader2 } from "lucide-react";
@@ -38,7 +39,7 @@ export default async function AdminLayout({
                 <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center gap-6">
                         <Link href="/admin" className="text-xl font-semibold">
-                            Loyalty Admin
+                            {branding.adminName}
                         </Link>
                         <AdminNav isAdmin={userIsAdmin} />
                     </div>

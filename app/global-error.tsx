@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
+import { AlertCircle } from "lucide-react";
+import { branding } from "@/lib/branding";
 
 export default function GlobalError({
     error,
@@ -29,6 +31,14 @@ export default function GlobalError({
                         maxWidth: "28rem",
                         textAlign: "center",
                     }}>
+                        <p style={{
+                            marginBottom: "1rem",
+                            fontSize: "1.25rem",
+                            fontWeight: "600",
+                            color: "#111827",
+                        }}>
+                            {branding.appName}
+                        </p>
                         <div style={{
                             margin: "0 auto 1rem",
                             width: "3rem",
@@ -39,20 +49,11 @@ export default function GlobalError({
                             alignItems: "center",
                             justifyContent: "center",
                         }}>
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="#dc2626"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="12" y1="8" x2="12" y2="12" />
-                                <line x1="12" y1="16" x2="12.01" y2="16" />
-                            </svg>
+                            <AlertCircle
+                                width={24}
+                                height={24}
+                                color="#dc2626"
+                            />
                         </div>
                         <h1 style={{
                             marginBottom: "0.5rem",
@@ -60,13 +61,13 @@ export default function GlobalError({
                             fontWeight: "600",
                             color: "#111827",
                         }}>
-                            Something went wrong
+                            {branding.errors.genericTitle}
                         </h1>
                         <p style={{
                             marginBottom: "1.5rem",
                             color: "#6b7280",
                         }}>
-                            A critical error occurred. Please try again.
+                            {branding.errors.genericMessage}
                         </p>
                         <button
                             onClick={reset}
@@ -81,7 +82,7 @@ export default function GlobalError({
                                 cursor: "pointer",
                             }}
                         >
-                            Try again
+                            {branding.errors.tryAgain}
                         </button>
                         {error.digest && (
                             <p style={{
