@@ -37,22 +37,24 @@ export default async function AdminLayout({
             {/* Header */}
             <header className="sticky top-0 z-40 border-b bg-white">
                 <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-6 w-[40%]">
                         <Link href="/admin" className="text-xl font-semibold">
                             {branding.adminName}
                         </Link>
                         <AdminNav isAdmin={userIsAdmin} />
                     </div>
                     <div className="flex items-center gap-4">
-                        <div className="text-sm text-stone-500">
-                            {user?.firstName || user?.emailAddresses[0]?.emailAddress}
+                        <div className="text-sm text-stone-500 text-right">
+                            <span>{user?.firstName || user?.emailAddresses[0]?.emailAddress}</span>
                             {role && (
-                                <span className="ml-2 rounded bg-stone-100 px-2 py-0.5 text-xs font-medium text-stone-600">
+                                <span className="ml-2 sm:inline block mt-1 sm:mt-0 rounded bg-stone-100 px-2 py-0.5 text-xs font-medium text-stone-600">
                                     {roleDisplayNames[role]}
                                 </span>
                             )}
                         </div>
-                        <UserButton />
+                        <div className="[&_.cl-avatarBox]:!size-10 sm:[&_.cl-avatarBox]:!size-8">
+                            <UserButton />
+                        </div>
                     </div>
                 </div>
 
