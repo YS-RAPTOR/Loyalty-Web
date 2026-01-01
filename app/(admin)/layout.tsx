@@ -6,6 +6,7 @@ import { UserButton } from "@clerk/nextjs";
 import { getRoleFromPublicMetadata, hasMinRoles, roleDisplayNames } from "@/lib/roles";
 import { branding } from "@/lib/branding";
 import { Toaster } from "@/components/ui/sonner";
+import { Logo } from "@/components/ui/logo";
 import { AdminNav, AdminNavMobile } from "./_components/admin-nav";
 import { Loader2 } from "lucide-react";
 
@@ -33,13 +34,15 @@ export default async function AdminLayout({
             >
                 Skip to main content
             </a>
-            
+
             {/* Header */}
             <header className="sticky top-0 z-40 border-b bg-white">
                 <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center gap-6 w-[40%]">
-                        <Link href="/admin" className="text-xl font-semibold">
-                            {branding.adminName}
+                        <Link href="/admin" className="flex items-center gap-2 text-xl font-semibold">
+                            <Logo size="md" className="sm:hidden" />
+                            <Logo size="sm" className="hidden sm:block" />
+                            <span className="hidden sm:inline">{branding.adminName}</span>
                         </Link>
                         <AdminNav isAdmin={userIsAdmin} />
                     </div>
@@ -66,15 +69,7 @@ export default async function AdminLayout({
 
             {/* Main content */}
             <main id="main-content" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                <Suspense
-                    fallback={
-                        <div className="flex items-center justify-center py-12">
-                            <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
-                        </div>
-                    }
-                >
-                    {children}
-                </Suspense>
+                {children}
             </main>
 
             <Toaster />

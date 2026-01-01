@@ -3,10 +3,12 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { convex } from "@/lib/convex";
 import QRCode from "qrcode";
+import sharp from "sharp";
+import path from "path";
 
 const SIZE_CONFIG = {
-    default: { width: 400, margin: 2 },
-    og: { width: 600, margin: 4 },
+    default: { width: 400, margin: 2, logoSize: 100 },
+    og: { width: 600, margin: 4, logoSize: 150 },
 } as const;
 
 export async function GET(request: NextRequest) {
@@ -61,26 +63,54 @@ export async function GET(request: NextRequest) {
 
         const config = SIZE_CONFIG[size ?? "default"] ?? SIZE_CONFIG.default;
 
+        // Generate QR code with high error correction (allows up to 30% damage/coverage)
         const qrBuffer = await QRCode.toBuffer(id, {
             type: "png",
             width: config.width,
             margin: config.margin,
+            errorCorrectionLevel: "H",
             color: {
                 dark: "#000000",
                 light: "#FFFFFF",
             },
         });
 
-        return new NextResponse(new Uint8Array(qrBuffer), {
+        // Load and resize logo
+        const logoPath = path.join(process.cwd(), "public", "logo.png");
+        const logo = await sharp(logoPath)
+            .resize(config.logoSize, config.logoSize, {
+                fit: "contain",
+                background: { r: 255, g: 255, b: 255, alpha: 1 },
+            })
+            .png()
+            .toBuffer();
+
+        // Calculate position to center the logo
+        const logoOffset = Math.floor((config.width - config.logoSize) / 2);
+
+        // Composite logo onto QR code
+        const finalImage = await sharp(qrBuffer)
+            .composite([
+                {
+                    input: logo,
+                    top: logoOffset,
+                    left: logoOffset,
+                },
+            ])
+            .png()
+            .toBuffer();
+
+        return new NextResponse(new Uint8Array(finalImage), {
             headers: {
                 "Content-Type": "image/png",
                 "Cache-Control": "public, max-age=31536000, immutable",
             },
         });
     } catch (error) {
+        console.error("QR generation error:", error);
         return NextResponse.json(
-            { error: "Customer not found" },
-            { status: 404 },
+            { error: "Failed to generate QR code" },
+            { status: 500 },
         );
     }
 }

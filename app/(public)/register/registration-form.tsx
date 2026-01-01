@@ -25,7 +25,8 @@ import {
 } from "@/lib/actions/registration";
 import { registrationSchema } from "@/lib/validations/customer";
 import { branding } from "@/lib/branding";
-import { Gift, Smartphone, UserCheck, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 
 type Step = "info" | "otp" | "already-registered";
 
@@ -151,9 +152,7 @@ export function RegistrationForm() {
             <div className="w-full max-w-md">
                 <div className="rounded-2xl border bg-card p-8 shadow-lg">
                     <div className="text-center">
-                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                            <UserCheck className="h-6 w-6 text-primary" />
-                        </div>
+                        <Logo size="lg" className="mx-auto mb-4" />
                         <h1 className="text-2xl font-bold tracking-tight">
                             Already Registered
                         </h1>
@@ -186,9 +185,7 @@ export function RegistrationForm() {
             <div className="w-full max-w-md">
                 <div className="rounded-2xl border bg-card p-8 shadow-lg">
                     <div className="text-center">
-                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                            <Smartphone className="h-6 w-6 text-primary" />
-                        </div>
+                        <Logo size="lg" className="mx-auto mb-4" />
                         <h1 className="text-2xl font-bold tracking-tight">
                             Verify Your Phone
                         </h1>
@@ -259,9 +256,7 @@ export function RegistrationForm() {
         <div className="w-full max-w-md">
             <div className="rounded-2xl border bg-card p-8 shadow-lg">
                 <div className="text-center">
-                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                        <Gift className="h-6 w-6 text-primary" />
-                    </div>
+                    <Logo size="lg" className="mx-auto mb-4" />
                     <h1 className="text-2xl font-bold tracking-tight">
                         {branding.program.joinHeading}
                     </h1>
@@ -346,7 +341,7 @@ export function RegistrationForm() {
                             {fieldErrors.email && <FieldError>{fieldErrors.email}</FieldError>}
                         </Field>
 
-                        <Field orientation="horizontal">
+                        <div className="flex items-center gap-3">
                             <Checkbox
                                 id="terms"
                                 checked={acceptedTerms}
@@ -356,8 +351,9 @@ export function RegistrationForm() {
                                         setFieldErrors({ ...fieldErrors, acceptedTerms: undefined });
                                     }
                                 }}
+                                className="shrink-0"
                             />
-                            <FieldLabel htmlFor="terms" className="font-normal">
+                            <label htmlFor="terms" className="text-sm">
                                 I accept the{" "}
                                 <Link
                                     href="/terms"
@@ -365,8 +361,8 @@ export function RegistrationForm() {
                                 >
                                     Terms and Conditions
                                 </Link>
-                            </FieldLabel>
-                        </Field>
+                            </label>
+                        </div>
                         {fieldErrors.acceptedTerms && <FieldError>{fieldErrors.acceptedTerms}</FieldError>}
 
                         {error && <FieldError>{error}</FieldError>}

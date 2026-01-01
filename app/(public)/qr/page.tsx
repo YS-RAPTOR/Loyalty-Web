@@ -5,6 +5,7 @@ import { convex } from "@/lib/convex";
 import { clientConfig } from "@/lib/config";
 import { branding } from "@/lib/branding";
 import { QrDisplay } from "./qr-display";
+import { Logo } from "@/components/ui/logo";
 import { AlertTriangle, Ban } from "lucide-react";
 
 type Props = {
@@ -57,6 +58,7 @@ export default async function QrPage({ searchParams }: Props) {
             <main className="min-h-screen bg-gradient-to-b from-muted/50 to-background">
                 <div className="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-12">
                     <div className="w-full max-w-md rounded-2xl border bg-card p-8 text-center shadow-lg">
+                        <Logo size="lg" className="mx-auto mb-4" />
                         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
                             <AlertTriangle className="h-8 w-8 text-destructive" />
                         </div>
@@ -88,6 +90,7 @@ export default async function QrPage({ searchParams }: Props) {
             <main className="min-h-screen bg-gradient-to-b from-muted/50 to-background">
                 <div className="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-12">
                     <div className="w-full max-w-md rounded-2xl border bg-card p-8 text-center shadow-lg">
+                        <Logo size="lg" className="mx-auto mb-4" />
                         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
                             <Ban className="h-8 w-8 text-destructive" />
                         </div>

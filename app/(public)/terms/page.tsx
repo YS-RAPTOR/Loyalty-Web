@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import fs from "fs";
 import path from "path";
 import { compileMDX } from "next-mdx-remote/rsc";
-import { FileText } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 
 export const metadata: Metadata = {
     title: "Terms and Conditions",
@@ -26,9 +26,7 @@ export default async function TermsPage() {
         <main className="min-h-screen bg-gradient-to-b from-muted/50 to-background">
             <div className="container mx-auto max-w-3xl px-4 py-12">
                 <div className="mb-8 text-center">
-                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                        <FileText className="h-6 w-6 text-primary" />
-                    </div>
+                    <Logo size="lg" className="mx-auto mb-4" />
                     <h1 className="text-3xl font-bold tracking-tight">
                         Terms and Conditions
                     </h1>

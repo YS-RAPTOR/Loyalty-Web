@@ -9,6 +9,14 @@ export const branding = {
     /** The main application name */
     appName: "TripleTCafe",
 
+    /** Logo configuration */
+    logo: {
+        /** Path to the main logo */
+        src: "/logo.png",
+        /** Alt text for the logo */
+        alt: "TripleTCafe",
+    },
+
     /** Admin panel name shown in the admin header */
     adminName: "TripleTCafe Admin",
 

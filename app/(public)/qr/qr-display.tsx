@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { branding } from "@/lib/branding";
-import { Gift, Download } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
+import { Download } from "lucide-react";
 
 type Props = {
     customerId: string;
@@ -16,9 +17,7 @@ export function QrDisplay({ customerId }: Props) {
         <div className="w-full max-w-md">
             <div className="rounded-2xl border bg-card p-8 shadow-lg">
                 <div className="text-center">
-                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                        <Gift className="h-6 w-6 text-primary" />
-                    </div>
+                    <Logo size="lg" className="mx-auto mb-4" />
                     <h1 className="text-2xl font-bold tracking-tight">
                         {branding.qr.heading}
                     </h1>
