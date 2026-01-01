@@ -1,8 +1,7 @@
 "use server";
 
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import {
-    getRoleFromMetadata,
     getRoleFromPublicMetadata,
     hasMinRoles,
     type UserRole,
@@ -24,14 +23,14 @@ async function verifyAdminRole(): Promise<{
     userId?: string;
     error?: string;
 }> {
-    const { userId, sessionClaims } = await auth();
+    const { userId } = await auth();
 
     if (!userId) {
         return { authorized: false, error: "Unauthorized" };
     }
 
-    const metadata = sessionClaims?.metadata as { role?: string } | undefined;
-    const role = getRoleFromMetadata(metadata);
+    const user = await currentUser();
+    const role = getRoleFromPublicMetadata(user?.publicMetadata);
     if (!hasMinRoles(role, "admin")) {
         return { authorized: false, error: "Insufficient permissions - admin role required" };
     }

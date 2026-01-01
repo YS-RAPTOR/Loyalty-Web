@@ -15,10 +15,12 @@ import { DialogFooter } from "@/components/ui/dialog";
 import {
     Field,
     FieldDescription,
+    FieldError,
     FieldGroup,
     FieldLabel,
 } from "@/components/ui/field";
 import { type OfferFormData, defaultFormData } from "./types";
+import { offerSchema } from "@/lib/validations/offer";
 
 interface OfferFormProps {
     initialData?: OfferFormData;
@@ -38,6 +40,7 @@ export function OfferForm({
     isEditMode = false,
 }: OfferFormProps) {
     const [formData, setFormData] = useState<OfferFormData>(initialData);
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string | undefined>>({});
     const colorInputRef = useRef<HTMLInputElement>(null);
     const hexInputRef = useRef<HTMLInputElement>(null);
 
@@ -45,13 +48,34 @@ export function OfferForm({
         e.preventDefault();
         // Read color from uncontrolled input at submit time
         const color = colorInputRef.current?.value ?? formData.color;
-        onSubmit({ ...formData, color });
+        const dataToValidate = { ...formData, color };
+
+        // Validate with zod
+        const result = offerSchema.safeParse(dataToValidate);
+
+        if (!result.success) {
+            const errors: Record<string, string> = {};
+            for (const issue of result.error.issues) {
+                const field = issue.path[0] as string;
+                if (!errors[field]) {
+                    errors[field] = issue.message;
+                }
+            }
+            setFieldErrors(errors);
+            return;
+        }
+
+        setFieldErrors({});
+        onSubmit(dataToValidate);
     };
 
     // Sync color picker to hex input without React re-renders
     const handleColorInput = (e: React.FormEvent<HTMLInputElement>) => {
         if (hexInputRef.current) {
             hexInputRef.current.value = e.currentTarget.value;
+        }
+        if (fieldErrors.color) {
+            setFieldErrors({ ...fieldErrors, color: undefined });
         }
     };
 
@@ -67,6 +91,9 @@ export function OfferForm({
             colorInputRef.current.value = color;
         }
         setFormData({ ...formData, color });
+        if (fieldErrors.color) {
+            setFieldErrors({ ...fieldErrors, color: undefined });
+        }
     };
 
     return (
@@ -77,12 +104,17 @@ export function OfferForm({
                     <Input
                         id="name"
                         value={formData.name}
-                        onChange={(e) =>
-                            setFormData({ ...formData, name: e.target.value })
-                        }
+                        onChange={(e) => {
+                            setFormData({ ...formData, name: e.target.value });
+                            if (fieldErrors.name) {
+                                setFieldErrors({ ...fieldErrors, name: undefined });
+                            }
+                        }}
                         placeholder="e.g., Coffee Loyalty"
-                        required
+                        maxLength={100}
+                        aria-invalid={!!fieldErrors.name}
                     />
+                    {fieldErrors.name && <FieldError>{fieldErrors.name}</FieldError>}
                 </Field>
 
                 <Field>
@@ -90,12 +122,18 @@ export function OfferForm({
                     <Textarea
                         id="description"
                         value={formData.description}
-                        onChange={(e) =>
-                            setFormData({ ...formData, description: e.target.value })
-                        }
+                        onChange={(e) => {
+                            setFormData({ ...formData, description: e.target.value });
+                            if (fieldErrors.description) {
+                                setFieldErrors({ ...fieldErrors, description: undefined });
+                            }
+                        }}
                         placeholder="e.g., Buy 5 coffees, get 1 free!"
                         rows={2}
+                        maxLength={500}
+                        aria-invalid={!!fieldErrors.description}
                     />
+                    {fieldErrors.description && <FieldError>{fieldErrors.description}</FieldError>}
                 </Field>
 
                 <Field>
@@ -108,7 +146,7 @@ export function OfferForm({
                             defaultValue={formData.color}
                             onInput={handleColorInput}
                             onBlur={handleColorBlur}
-                            className="h-10 w-14 cursor-pointer rounded border border-stone-200 p-1"
+                            className="h-11 w-14 cursor-pointer rounded border border-stone-200 p-1"
                         />
                         <input
                             ref={hexInputRef}
@@ -116,9 +154,11 @@ export function OfferForm({
                             defaultValue={formData.color}
                             onChange={handleHexChange}
                             placeholder="#3b82f6"
-                            className="border-input focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-28 rounded-md border bg-transparent px-2.5 py-1 font-mono text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] placeholder:text-muted-foreground"
+                            className="border-input focus-visible:border-ring focus-visible:ring-ring/50 h-11 w-28 rounded-md border bg-transparent px-2.5 py-1 font-mono text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] placeholder:text-muted-foreground"
+                            aria-invalid={!!fieldErrors.color}
                         />
                     </div>
+                    {fieldErrors.color && <FieldError>{fieldErrors.color}</FieldError>}
                 </Field>
 
                 <Field>
@@ -166,15 +206,19 @@ export function OfferForm({
                                 type="number"
                                 min="1"
                                 value={formData.requiredCount}
-                                onChange={(e) =>
+                                onChange={(e) => {
                                     setFormData({
                                         ...formData,
                                         requiredCount: parseInt(e.target.value) || 1,
-                                    })
-                                }
+                                    });
+                                    if (fieldErrors.requiredCount) {
+                                        setFieldErrors({ ...fieldErrors, requiredCount: undefined });
+                                    }
+                                }}
                                 disabled={isEditMode}
-                                required
+                                aria-invalid={!!fieldErrors.requiredCount}
                             />
+                            {fieldErrors.requiredCount && <FieldError>{fieldErrors.requiredCount}</FieldError>}
                             <FieldDescription>
                                 {isEditMode
                                     ? "Required purchases cannot be changed. To use a different amount, create a new offer and discontinue this one."
@@ -190,14 +234,18 @@ export function OfferForm({
                                 min="1"
                                 max="100"
                                 value={formData.percent}
-                                onChange={(e) =>
+                                onChange={(e) => {
                                     setFormData({
                                         ...formData,
                                         percent: parseInt(e.target.value) || 100,
-                                    })
-                                }
-                                required
+                                    });
+                                    if (fieldErrors.percent) {
+                                        setFieldErrors({ ...fieldErrors, percent: undefined });
+                                    }
+                                }}
+                                aria-invalid={!!fieldErrors.percent}
                             />
+                            {fieldErrors.percent && <FieldError>{fieldErrors.percent}</FieldError>}
                             <FieldDescription>100% = free item</FieldDescription>
                         </Field>
                     </>

@@ -19,11 +19,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Field, FieldLabel, FieldDescription } from "@/components/ui/field";
+import { Field, FieldLabel, FieldDescription, FieldError } from "@/components/ui/field";
 import { UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { inviteUser } from "@/lib/actions/clerk";
 import { type UserRole, roleDisplayNames, roleDescriptions } from "@/lib/roles";
+import { validateInviteMember } from "@/lib/validations/auth";
 
 interface InviteMemberDialogProps {
     onInvited?: () => void;
@@ -34,12 +35,16 @@ export function InviteMemberDialog({ onInvited }: InviteMemberDialogProps) {
     const [email, setEmail] = useState("");
     const [role, setRole] = useState<UserRole>("staff");
     const [isInviting, setIsInviting] = useState(false);
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setErrors({});
 
-        if (!email || !email.includes("@")) {
-            toast.error("Please enter a valid email address");
+        // Validate with zod
+        const validation = validateInviteMember({ email, role });
+        if (!validation.success) {
+            setErrors(validation.errors || {});
             return;
         }
 
@@ -51,6 +56,7 @@ export function InviteMemberDialog({ onInvited }: InviteMemberDialogProps) {
                 setOpen(false);
                 setEmail("");
                 setRole("staff");
+                setErrors({});
                 onInvited?.();
             } else {
                 toast.error(result.error || "Failed to send invitation");
@@ -69,6 +75,7 @@ export function InviteMemberDialog({ onInvited }: InviteMemberDialogProps) {
             if (!o) {
                 setEmail("");
                 setRole("staff");
+                setErrors({});
             }
         }}>
             <DialogTrigger render={<Button className="w-full sm:w-auto gap-2" />}>
@@ -91,8 +98,10 @@ export function InviteMemberDialog({ onInvited }: InviteMemberDialogProps) {
                             placeholder="colleague@example.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            required
+                            aria-invalid={!!errors.email}
+                            aria-describedby={errors.email ? "email-error" : undefined}
                         />
+                        {errors.email && <FieldError id="email-error">{errors.email}</FieldError>}
                     </Field>
 
                     <Field>
@@ -101,7 +110,7 @@ export function InviteMemberDialog({ onInvited }: InviteMemberDialogProps) {
                             value={role}
                             onValueChange={(value) => setRole(value as UserRole)}
                         >
-                            <SelectTrigger>
+                            <SelectTrigger aria-invalid={!!errors.role}>
                                 <SelectValue>
                                     {roleDisplayNames[role]}
                                 </SelectValue>
@@ -121,6 +130,7 @@ export function InviteMemberDialog({ onInvited }: InviteMemberDialogProps) {
                         <FieldDescription>
                             {roleDescriptions[role]}
                         </FieldDescription>
+                        {errors.role && <FieldError>{errors.role}</FieldError>}
                     </Field>
 
                     <DialogFooter className="gap-2">

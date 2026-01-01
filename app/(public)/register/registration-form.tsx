@@ -30,8 +30,17 @@ import {
     verifyOtpAction,
     createCustomerAction,
 } from "@/lib/actions/registration";
+import { registrationSchema } from "@/lib/validations/customer";
 
 type Step = "info" | "otp" | "already-registered";
+
+interface FormErrors {
+    phone?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    acceptedTerms?: string;
+}
 
 export function RegistrationForm() {
     const router = useRouter();
@@ -44,11 +53,42 @@ export function RegistrationForm() {
     const [acceptedTerms, setAcceptedTerms] = useState(false);
     const [otpCode, setOtpCode] = useState("");
     const [error, setError] = useState("");
+    const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
     const [isLoading, setIsLoading] = useState(false);
+
+    const validateForm = (): boolean => {
+        const result = registrationSchema.safeParse({
+            phone,
+            firstName,
+            lastName: lastName || undefined,
+            email: email || undefined,
+            acceptedTerms,
+        });
+
+        if (!result.success) {
+            const errors: FormErrors = {};
+            for (const issue of result.error.issues) {
+                const field = issue.path[0] as keyof FormErrors;
+                if (!errors[field]) {
+                    errors[field] = issue.message;
+                }
+            }
+            setFieldErrors(errors);
+            return false;
+        }
+
+        setFieldErrors({});
+        return true;
+    };
 
     const handleSendOtp = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
+
+        if (!validateForm()) {
+            return;
+        }
+
         setIsLoading(true);
 
         try {
@@ -88,9 +128,9 @@ export function RegistrationForm() {
             // Create customer and send welcome SMS
             const createResult = await createCustomerAction({
                 phoneE164,
-                firstName,
-                lastName: lastName || undefined,
-                email: email || undefined,
+                firstName: firstName.trim(),
+                lastName: lastName.trim() || undefined,
+                email: email.trim() || undefined,
             });
 
             if (!createResult.success) {
@@ -131,6 +171,7 @@ export function RegistrationForm() {
                             setPhone("");
                             setStep("info");
                             setError("");
+                            setFieldErrors({});
                         }}
                     >
                         Back
@@ -218,9 +259,15 @@ export function RegistrationForm() {
                                 type="tel"
                                 placeholder="0412 345 678"
                                 value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                required
+                                onChange={(e) => {
+                                    setPhone(e.target.value);
+                                    if (fieldErrors.phone) {
+                                        setFieldErrors({ ...fieldErrors, phone: undefined });
+                                    }
+                                }}
+                                aria-invalid={!!fieldErrors.phone}
                             />
+                            {fieldErrors.phone && <FieldError>{fieldErrors.phone}</FieldError>}
                         </Field>
 
                         <Field>
@@ -230,9 +277,16 @@ export function RegistrationForm() {
                                 type="text"
                                 placeholder="John"
                                 value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                required
+                                onChange={(e) => {
+                                    setFirstName(e.target.value);
+                                    if (fieldErrors.firstName) {
+                                        setFieldErrors({ ...fieldErrors, firstName: undefined });
+                                    }
+                                }}
+                                maxLength={100}
+                                aria-invalid={!!fieldErrors.firstName}
                             />
+                            {fieldErrors.firstName && <FieldError>{fieldErrors.firstName}</FieldError>}
                         </Field>
 
                         <Field>
@@ -242,8 +296,16 @@ export function RegistrationForm() {
                                 type="text"
                                 placeholder="Smith"
                                 value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
+                                onChange={(e) => {
+                                    setLastName(e.target.value);
+                                    if (fieldErrors.lastName) {
+                                        setFieldErrors({ ...fieldErrors, lastName: undefined });
+                                    }
+                                }}
+                                maxLength={100}
+                                aria-invalid={!!fieldErrors.lastName}
                             />
+                            {fieldErrors.lastName && <FieldError>{fieldErrors.lastName}</FieldError>}
                         </Field>
 
                         <Field>
@@ -253,18 +315,28 @@ export function RegistrationForm() {
                                 type="email"
                                 placeholder="john@example.com"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                    if (fieldErrors.email) {
+                                        setFieldErrors({ ...fieldErrors, email: undefined });
+                                    }
+                                }}
+                                maxLength={254}
+                                aria-invalid={!!fieldErrors.email}
                             />
+                            {fieldErrors.email && <FieldError>{fieldErrors.email}</FieldError>}
                         </Field>
 
                         <Field orientation="horizontal">
                             <Checkbox
                                 id="terms"
                                 checked={acceptedTerms}
-                                onCheckedChange={(checked) =>
-                                    setAcceptedTerms(checked === true)
-                                }
-                                required
+                                onCheckedChange={(checked) => {
+                                    setAcceptedTerms(checked === true);
+                                    if (fieldErrors.acceptedTerms) {
+                                        setFieldErrors({ ...fieldErrors, acceptedTerms: undefined });
+                                    }
+                                }}
                             />
                             <FieldLabel htmlFor="terms" className="font-normal">
                                 I accept the{" "}
@@ -276,6 +348,7 @@ export function RegistrationForm() {
                                 </Link>
                             </FieldLabel>
                         </Field>
+                        {fieldErrors.acceptedTerms && <FieldError>{fieldErrors.acceptedTerms}</FieldError>}
 
                         {error && <FieldError>{error}</FieldError>}
                     </FieldGroup>
@@ -286,7 +359,7 @@ export function RegistrationForm() {
                     type="submit"
                     form="registration-form"
                     className="w-full"
-                    disabled={isLoading || !acceptedTerms}
+                    disabled={isLoading}
                 >
                     {isLoading ? "Sending Code..." : "Continue"}
                 </Button>

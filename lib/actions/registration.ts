@@ -6,6 +6,15 @@ import { sendOtp, verifyOtp } from "@/lib/twilio";
 import { normalizeAuPhone } from "./utils";
 import { sendWelcomeSms } from "./sms";
 
+function formatRetryAfter(ms: number): string {
+    const seconds = Math.ceil(ms / 1000);
+    if (seconds < 60) {
+        return `${seconds} second${seconds !== 1 ? "s" : ""}`;
+    }
+    const minutes = Math.ceil(seconds / 60);
+    return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
+}
+
 export async function sendOtpAction(phone: string): Promise<{
     success: boolean;
     error?: string;
@@ -22,8 +31,23 @@ export async function sendOtpAction(phone: string): Promise<{
     }
 
     try {
+        const client = convex();
+
+        // Check rate limit first
+        const rateLimit = await client.mutation(api.rateLimits.checkOtpSendLimit, {
+            phoneE164,
+        });
+
+        if (!rateLimit.ok) {
+            const retryIn = formatRetryAfter(rateLimit.retryAfter ?? 60000);
+            return {
+                success: false,
+                error: `Too many OTP requests. Please try again in ${retryIn}.`,
+            };
+        }
+
         // Check if phone already exists
-        const existingCustomer = await convex.query(api.customers.getByPhone, {
+        const existingCustomer = await client.query(api.customers.getByPhone, {
             phoneE164,
         });
 
@@ -65,11 +89,29 @@ export async function verifyOtpAction(
     }
 
     try {
+        const client = convex();
+
+        // Check rate limit first
+        const rateLimit = await client.mutation(api.rateLimits.checkOtpVerifyLimit, {
+            phoneE164,
+        });
+
+        if (!rateLimit.ok) {
+            const retryIn = formatRetryAfter(rateLimit.retryAfter ?? 60000);
+            return {
+                success: false,
+                error: `Too many verification attempts. Please try again in ${retryIn}.`,
+            };
+        }
+
         const result = await verifyOtp(phoneE164, code);
 
         if (!result.success) {
             return { success: false, error: result.error || "Invalid OTP" };
         }
+
+        // Reset rate limit on successful verification
+        await client.mutation(api.rateLimits.resetOtpVerifyLimit, { phoneE164 });
 
         return { success: true };
     } catch (error) {
@@ -93,8 +135,23 @@ export async function createCustomerAction(data: {
     alreadyRegistered?: boolean;
 }> {
     try {
+        const client = convex();
+
+        // Check rate limit first (use phone as identifier)
+        const rateLimit = await client.mutation(api.rateLimits.checkCustomerCreationLimit, {
+            identifier: data.phoneE164,
+        });
+
+        if (!rateLimit.ok) {
+            const retryIn = formatRetryAfter(rateLimit.retryAfter ?? 60000);
+            return {
+                success: false,
+                error: `Too many registration attempts. Please try again in ${retryIn}.`,
+            };
+        }
+
         // Create customer in Convex
-        const customerId = await convex.mutation(api.customers.create, {
+        const customerId = await client.mutation(api.customers.create, {
             phoneE164: data.phoneE164,
             firstName: data.firstName,
             lastName: data.lastName,

@@ -21,7 +21,7 @@ export async function sendWelcomeSms(
         const result = await sendSms(phoneE164, message);
 
         if (result.success) {
-            await convex.mutation(api.customers.markWelcomeSmsSent, {
+            await convex().mutation(api.customers.markWelcomeSmsSent, {
                 id: customerId,
             });
             return { success: true };

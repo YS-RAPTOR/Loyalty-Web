@@ -25,7 +25,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Separator } from "@/components/ui/separator";
 import { BackLink } from "@/components/ui/back-link";
 import { EmptyState, LoadingSkeleton } from "@/components/ui/empty-state";
@@ -43,6 +43,7 @@ import { resendQrAction } from "@/lib/actions/customer";
 import { formatDate } from "@/lib/date";
 import { type OfferRule, type OfferEffect, getOfferDescription } from "@/lib/types/offer";
 import { getRoleFromPublicMetadata, hasMinRoles } from "@/lib/roles";
+import { customerEditSchema } from "@/lib/validations/customer";
 
 interface PageProps {
     params: Promise<{ customerId: string }>;
@@ -179,6 +180,7 @@ function EditCustomerDialog({
         email: customer.email || "",
         phoneE164: customer.phoneE164,
     });
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string | undefined>>({});
 
     // Reset form when dialog opens
     const handleOpenChange = (isOpen: boolean) => {
@@ -189,6 +191,7 @@ function EditCustomerDialog({
                 email: customer.email || "",
                 phoneE164: customer.phoneE164,
             });
+            setFieldErrors({});
         }
         setOpen(isOpen);
     };
@@ -196,23 +199,34 @@ function EditCustomerDialog({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!form.firstName.trim()) {
-            toast.error("First name is required");
+        // Validate with zod
+        const result = customerEditSchema.safeParse({
+            firstName: form.firstName,
+            lastName: form.lastName || undefined,
+            email: form.email || undefined,
+            phoneE164: form.phoneE164,
+        });
+
+        if (!result.success) {
+            const errors: Record<string, string> = {};
+            for (const issue of result.error.issues) {
+                const field = issue.path[0] as string;
+                if (!errors[field]) {
+                    errors[field] = issue.message;
+                }
+            }
+            setFieldErrors(errors);
             return;
         }
 
-        if (!form.phoneE164.trim()) {
-            toast.error("Phone number is required");
-            return;
-        }
-
+        setFieldErrors({});
         setIsUpdating(true);
         try {
             await onSave({
-                firstName: form.firstName.trim(),
-                lastName: form.lastName.trim() || undefined,
-                email: form.email.trim() || undefined,
-                phoneE164: form.phoneE164.trim(),
+                firstName: result.data.firstName,
+                lastName: result.data.lastName || undefined,
+                email: result.data.email || undefined,
+                phoneE164: result.data.phoneE164,
             });
             setOpen(false);
         } catch {
@@ -246,22 +260,34 @@ function EditCustomerDialog({
                                 <Input
                                     id="firstName"
                                     value={form.firstName}
-                                    onChange={(e) =>
-                                        setForm({ ...form, firstName: e.target.value })
-                                    }
+                                    onChange={(e) => {
+                                        setForm({ ...form, firstName: e.target.value });
+                                        if (fieldErrors.firstName) {
+                                            setFieldErrors({ ...fieldErrors, firstName: undefined });
+                                        }
+                                    }}
                                     placeholder="First name"
+                                    maxLength={100}
+                                    aria-invalid={!!fieldErrors.firstName}
                                 />
+                                {fieldErrors.firstName && <FieldError>{fieldErrors.firstName}</FieldError>}
                             </Field>
                             <Field>
                                 <FieldLabel htmlFor="lastName">Last name (optional)</FieldLabel>
                                 <Input
                                     id="lastName"
                                     value={form.lastName}
-                                    onChange={(e) =>
-                                        setForm({ ...form, lastName: e.target.value })
-                                    }
+                                    onChange={(e) => {
+                                        setForm({ ...form, lastName: e.target.value });
+                                        if (fieldErrors.lastName) {
+                                            setFieldErrors({ ...fieldErrors, lastName: undefined });
+                                        }
+                                    }}
                                     placeholder="Last name"
+                                    maxLength={100}
+                                    aria-invalid={!!fieldErrors.lastName}
                                 />
+                                {fieldErrors.lastName && <FieldError>{fieldErrors.lastName}</FieldError>}
                             </Field>
                         </div>
 
@@ -270,11 +296,16 @@ function EditCustomerDialog({
                             <Input
                                 id="phoneE164"
                                 value={form.phoneE164}
-                                onChange={(e) =>
-                                    setForm({ ...form, phoneE164: e.target.value })
-                                }
-                                placeholder="+1234567890"
+                                onChange={(e) => {
+                                    setForm({ ...form, phoneE164: e.target.value });
+                                    if (fieldErrors.phoneE164) {
+                                        setFieldErrors({ ...fieldErrors, phoneE164: undefined });
+                                    }
+                                }}
+                                placeholder="+61412345678"
+                                aria-invalid={!!fieldErrors.phoneE164}
                             />
+                            {fieldErrors.phoneE164 && <FieldError>{fieldErrors.phoneE164}</FieldError>}
                         </Field>
 
                         <Field>
@@ -283,11 +314,17 @@ function EditCustomerDialog({
                                 id="email"
                                 type="email"
                                 value={form.email}
-                                onChange={(e) =>
-                                    setForm({ ...form, email: e.target.value })
-                                }
+                                onChange={(e) => {
+                                    setForm({ ...form, email: e.target.value });
+                                    if (fieldErrors.email) {
+                                        setFieldErrors({ ...fieldErrors, email: undefined });
+                                    }
+                                }}
                                 placeholder="customer@example.com"
+                                maxLength={254}
+                                aria-invalid={!!fieldErrors.email}
                             />
+                            {fieldErrors.email && <FieldError>{fieldErrors.email}</FieldError>}
                         </Field>
                     </div>
 

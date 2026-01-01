@@ -21,9 +21,34 @@ export async function GET(request: NextRequest) {
         );
     }
 
+    // Get IP for rate limiting (use x-forwarded-for or fallback)
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() 
+        ?? request.headers.get("x-real-ip") 
+        ?? "anonymous";
+
     try {
+        const client = convex();
+
+        // Check rate limit
+        const rateLimit = await client.mutation(api.rateLimits.consumeQrGenerationLimit, {
+            identifier: ip,
+        });
+
+        if (!rateLimit.ok) {
+            const retryAfter = Math.ceil((rateLimit.retryAfter ?? 60000) / 1000);
+            return NextResponse.json(
+                { error: "Too many requests. Please try again later." },
+                { 
+                    status: 429,
+                    headers: {
+                        "Retry-After": String(retryAfter),
+                    },
+                },
+            );
+        }
+
         // Validate customer exists
-        const customer = await convex.query(api.customers.getById, {
+        const customer = await client.query(api.customers.getById, {
             id: id as Id<"customers">,
         });
 

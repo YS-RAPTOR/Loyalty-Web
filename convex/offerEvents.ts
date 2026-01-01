@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import { paginationOptsValidator } from "convex/server";
 import { mutation, query } from "./_generated/server";
 import { requireRole } from "./auth";
 
@@ -64,22 +65,22 @@ export const getProgress = query({
 
 // Get all events (requires admin role - for audit log)
 export const listAll = query({
-    args: {},
-    handler: async (ctx) => {
+    args: { paginationOpts: paginationOptsValidator },
+    handler: async (ctx, args) => {
         // Require admin role
         await requireRole(ctx, "admin");
 
         // Use by_createdAt index for consistent time-based ordering
-        const events = await ctx.db
+        const results = await ctx.db
             .query("offerEvents")
             .withIndex("by_createdAt")
             .order("desc")
-            .collect();
+            .paginate(args.paginationOpts);
 
         // Denormalize customer and offer data for display
         // This follows the relationship pattern: fetch via ID, then enrich
-        const enrichedEvents = await Promise.all(
-            events.map(async (event) => {
+        const enrichedPage = await Promise.all(
+            results.page.map(async (event) => {
                 const customer = await ctx.db.get(event.customerId);
                 const offer = await ctx.db.get(event.offerId);
 
@@ -105,7 +106,10 @@ export const listAll = query({
             })
         );
 
-        return enrichedEvents;
+        return {
+            ...results,
+            page: enrichedPage,
+        };
     },
 });
 

@@ -67,7 +67,7 @@ export default async function QrPage({ searchParams }: Props) {
     // Validate customer exists
     let customer = null;
     try {
-        customer = await convex.query(api.customers.getById, {
+        customer = await convex().query(api.customers.getById, {
             id: id as Id<"customers">,
         });
     } catch {

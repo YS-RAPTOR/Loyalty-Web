@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -21,20 +22,30 @@ const navItems = [
 ] as const;
 
 function NavItems({ isAdmin }: AdminNavProps) {
+    const pathname = usePathname();
     const filteredItems = navItems.filter((item) => !item.adminOnly || isAdmin);
 
     return (
         <>
-            {filteredItems.map((item) => (
-                <NavigationMenuItem key={item.href}>
-                    <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
-                        render={<Link href={item.href} />}
-                    >
-                        {item.label}
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-            ))}
+            {filteredItems.map((item) => {
+                // Check if current path matches nav item
+                // Exact match for /admin, prefix match for others
+                const isActive = item.href === "/admin" 
+                    ? pathname === "/admin"
+                    : pathname.startsWith(item.href);
+                
+                return (
+                    <NavigationMenuItem key={item.href}>
+                        <NavigationMenuLink
+                            className={navigationMenuTriggerStyle()}
+                            render={<Link href={item.href} />}
+                            active={isActive}
+                        >
+                            {item.label}
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
+                );
+            })}
         </>
     );
 }
