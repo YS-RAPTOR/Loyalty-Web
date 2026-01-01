@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ShieldCheck, UserPlus } from "lucide-react";
 
 export default function NotFound() {
@@ -19,14 +20,20 @@ export default function NotFound() {
                         The page you&apos;re looking for doesn&apos;t exist or has been moved.
                     </p>
                     <div className="mt-8 flex flex-col gap-3">
-                        <Button render={<Link href="/register" />} nativeButton={false} className="w-full gap-2">
+                        <Link 
+                            href="/register" 
+                            className={cn(buttonVariants({ variant: "default" }), "w-full gap-2")}
+                        >
                             <UserPlus className="h-4 w-4" />
                             Register for Rewards
-                        </Button>
-                        <Button render={<Link href="/admin" />} nativeButton={false} variant="outline" className="w-full gap-2">
+                        </Link>
+                        <Link 
+                            href="/admin" 
+                            className={cn(buttonVariants({ variant: "outline" }), "w-full gap-2")}
+                        >
                             <ShieldCheck className="h-4 w-4" />
                             Staff Login
-                        </Button>
+                        </Link>
                     </div>
                 </div>
             </div>
