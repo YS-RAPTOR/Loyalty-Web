@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ConvexClientProvider } from "@/components/convex-client-provider";
+import { clientConfig } from "@/lib/config";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -17,6 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+    metadataBase: new URL(clientConfig.appUrl),
     title: "Loyalty Web",
     description: "Loyalty program management",
 };

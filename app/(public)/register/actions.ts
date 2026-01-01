@@ -1,8 +1,8 @@
 "use server";
 
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
 import { convex } from "@/lib/convex";
+import { clientConfig } from "@/lib/config";
 import { sendOtp, verifyOtp, sendSms } from "@/lib/twilio";
 
 /**
@@ -114,7 +114,7 @@ export async function createCustomerAction(data: {
         });
 
         // Send welcome SMS (don't block on failure)
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "";
+        const baseUrl = clientConfig.appUrl;
         const qrLink = `${baseUrl}/qr?id=${customerId}`;
         const message = `Welcome to our loyalty program, ${data.firstName}! Your QR code is ready: ${qrLink}`;
 

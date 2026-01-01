@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { convex } from "@/lib/convex";
+import { clientConfig } from "@/lib/config";
 import { QrDisplay } from "./qr-display";
 
 type Props = {
@@ -20,7 +21,7 @@ export async function generateMetadata({
         };
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "";
+    const baseUrl = clientConfig.appUrl;
 
     return {
         title: "Your QR Code - Loyalty Program",

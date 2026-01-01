@@ -8,6 +8,7 @@ function required<T>(value: T | undefined, name: string): T {
 // Client config (safe to use in client components)
 // NEXT_PUBLIC_* variables must be accessed statically for Next.js to inline them
 export const clientConfig = {
+    appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
     clerk: {
         publishableKey: required(
             process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
