@@ -1,0 +1,35 @@
+import { cn } from "@/lib/utils";
+
+interface PageHeaderProps {
+    title: string;
+    description?: string;
+    children?: React.ReactNode;
+    className?: string;
+}
+
+/**
+ * A consistent page header component with title, optional description, and action slot.
+ */
+export function PageHeader({
+    title,
+    description,
+    children,
+    className,
+}: PageHeaderProps) {
+    return (
+        <div
+            className={cn(
+                "flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between",
+                className
+            )}
+        >
+            <div>
+                <h1 className="text-xl font-bold sm:text-2xl">{title}</h1>
+                {description && (
+                    <p className="text-sm text-stone-500 sm:text-base">{description}</p>
+                )}
+            </div>
+            {children}
+        </div>
+    );
+}

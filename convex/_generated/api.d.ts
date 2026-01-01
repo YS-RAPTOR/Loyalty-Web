@@ -8,16 +8,22 @@
  * @module
  */
 
+import type * as auth from "../auth.js";
 import type * as customers from "../customers.js";
+import type * as offerEvents from "../offerEvents.js";
+import type * as offers from "../offers.js";
 
 import type {
-    ApiFromModules,
-    FilterApi,
-    FunctionReference,
+  ApiFromModules,
+  FilterApi,
+  FunctionReference,
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-    customers: typeof customers;
+  auth: typeof auth;
+  customers: typeof customers;
+  offerEvents: typeof offerEvents;
+  offers: typeof offers;
 }>;
 
 /**
@@ -29,8 +35,8 @@ declare const fullApi: ApiFromModules<{
  * ```
  */
 export declare const api: FilterApi<
-    typeof fullApi,
-    FunctionReference<any, "public">
+  typeof fullApi,
+  FunctionReference<any, "public">
 >;
 
 /**
@@ -42,8 +48,8 @@ export declare const api: FilterApi<
  * ```
  */
 export declare const internal: FilterApi<
-    typeof fullApi,
-    FunctionReference<any, "internal">
+  typeof fullApi,
+  FunctionReference<any, "internal">
 >;
 
 export declare const components: {};

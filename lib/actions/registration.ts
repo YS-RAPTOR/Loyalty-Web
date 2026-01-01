@@ -2,21 +2,9 @@
 
 import { api } from "@/convex/_generated/api";
 import { convex } from "@/lib/convex";
-import { clientConfig } from "@/lib/config";
-import { sendOtp, verifyOtp, sendSms } from "@/lib/twilio";
-
-/**
- * Normalize Australian phone number to E.164 format
- */
-function normalizeAuPhone(phone: string): string | null {
-    const cleaned = phone.replace(/[\s\-()]/g, "");
-
-    if (/^\+61[2-9]\d{8}$/.test(cleaned)) return cleaned;
-    if (/^61[2-9]\d{8}$/.test(cleaned)) return `+${cleaned}`;
-    if (/^0[2-9]\d{8}$/.test(cleaned)) return `+61${cleaned.slice(1)}`;
-
-    return null;
-}
+import { sendOtp, verifyOtp } from "@/lib/twilio";
+import { normalizeAuPhone } from "./utils";
+import { sendWelcomeSms } from "./sms";
 
 export async function sendOtpAction(phone: string): Promise<{
     success: boolean;
@@ -114,23 +102,8 @@ export async function createCustomerAction(data: {
         });
 
         // Send welcome SMS (don't block on failure)
-        const baseUrl = clientConfig.appUrl;
-        const qrLink = `${baseUrl}/qr?id=${customerId}`;
-        const message = `Welcome to our loyalty program, ${data.firstName}! Your QR code is ready: ${qrLink}`;
-
         try {
-            const smsResult = await sendSms(data.phoneE164, message);
-
-            if (smsResult.success) {
-                await convex.mutation(api.customers.markWelcomeSmsSent, {
-                    id: customerId,
-                });
-            } else {
-                console.error(
-                    "Welcome SMS failed to send for customer:",
-                    customerId,
-                );
-            }
+            await sendWelcomeSms(customerId, data.phoneE164, data.firstName);
         } catch (smsError) {
             console.error("Welcome SMS error:", smsError);
             // Don't fail the registration if SMS fails
