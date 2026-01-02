@@ -14,7 +14,7 @@ export default function SignInPage() {
                     {branding.tagline}
                 </p>
             </div>
-            <SignIn />
+            <SignIn forceRedirectUrl="/admin" />
         </div>
     );
 }

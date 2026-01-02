@@ -141,7 +141,7 @@ export async function inviteUser(email: string, role: UserRole): Promise<{
         await client.invitations.createInvitation({
             emailAddress: email,
             publicMetadata: { role },
-            redirectUrl: `${clientConfig.appUrl}/admin`,
+            redirectUrl: `${clientConfig.appUrl}/sign-in`,
             ignoreExisting: false,
         });
 
