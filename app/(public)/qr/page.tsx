@@ -34,7 +34,7 @@ export async function generateMetadata({
             description: branding.meta.qrWithIdDescription,
             images: [
                 {
-                    url: `${baseUrl}/api/qr?id=${id}`,
+                    url: `${baseUrl}/api/qr?id=${id}&size=og`,
                     width: 600,
                     height: 600,
                     alt: branding.meta.qrOgAlt,
@@ -45,7 +45,7 @@ export async function generateMetadata({
             card: "summary_large_image",
             title: branding.meta.qrWithIdTitle,
             description: branding.meta.qrWithIdDescription,
-            images: [`${baseUrl}/api/qr?id=${id}`],
+            images: [`${baseUrl}/api/qr?id=${id}&size=og`],
         },
     };
 }
