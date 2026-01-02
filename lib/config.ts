@@ -5,10 +5,28 @@ function required<T>(value: T | undefined, name: string): T {
     return value;
 }
 
+// Determine the app URL from Vercel env vars or fallback
+function getAppUrl(): string {
+    // Explicit override takes priority
+    if (process.env.NEXT_PUBLIC_APP_URL) {
+        return process.env.NEXT_PUBLIC_APP_URL;
+    }
+    // Vercel production URL (e.g., "myapp.vercel.app" or custom domain)
+    if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+        return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+    }
+    // Vercel preview/branch URL
+    if (process.env.VERCEL_URL) {
+        return `https://${process.env.VERCEL_URL}`;
+    }
+    // Local development fallback
+    return "http://localhost:3000";
+}
+
 // Client config (safe to use in client components)
 // NEXT_PUBLIC_* variables must be accessed statically for Next.js to inline them
 export const clientConfig = {
-    appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+    appUrl: getAppUrl(),
     clerk: {
         publishableKey: required(
             process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
