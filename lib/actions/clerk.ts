@@ -141,8 +141,9 @@ export async function inviteUser(email: string, role: UserRole): Promise<{
         await client.invitations.createInvitation({
             emailAddress: email,
             publicMetadata: { role },
-            redirectUrl: `${clientConfig.appUrl}/sign-in`,
+            redirectUrl: `${clientConfig.appUrl}/sign-up`,
             ignoreExisting: false,
+            expiresInDays: 1,
         });
 
         return { success: true };

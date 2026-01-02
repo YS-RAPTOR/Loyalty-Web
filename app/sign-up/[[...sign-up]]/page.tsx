@@ -14,7 +14,7 @@ export default function SignUpPage() {
                     {branding.tagline}
                 </p>
             </div>
-            <SignUp />
+            <SignUp forceRedirectUrl="/admin" />
         </div>
     );
 }
