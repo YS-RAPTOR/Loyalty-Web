@@ -8,7 +8,7 @@ import path from "path";
 
 const SIZE_CONFIG = {
     default: { width: 400, margin: 2, logoSize: 100 },
-    og: { width: 600, margin: 4, logoSize: 150 },
+    og: { width: 1200, margin: 4, logoSize: 300 },
 } as const;
 
 export async function GET(request: NextRequest) {
@@ -24,8 +24,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Get IP for rate limiting (use x-forwarded-for or fallback)
-    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() 
-        ?? request.headers.get("x-real-ip") 
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+        ?? request.headers.get("x-real-ip")
         ?? "anonymous";
 
     try {
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
             const retryAfter = Math.ceil((rateLimit.retryAfter ?? 60000) / 1000);
             return NextResponse.json(
                 { error: "Too many requests. Please try again later." },
-                { 
+                {
                     status: 429,
                     headers: {
                         "Retry-After": String(retryAfter),
@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
         const logo = await sharp(logoPath)
             .resize(config.logoSize, config.logoSize, {
                 fit: "contain",
-                background: { r: 255, g: 255, b: 255, alpha: 1 },
+                background: { r: 255, g: 255, b: 255, alpha: 0 },
             })
             .png()
             .toBuffer();
