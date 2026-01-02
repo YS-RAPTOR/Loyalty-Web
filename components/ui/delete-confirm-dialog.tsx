@@ -76,7 +76,7 @@ export function DeleteConfirmDialog({
                 render={trigger ?? <Button variant="ghost" size={triggerSize} />}
                 onClick={() => setOpen(true)}
             >
-                {!trigger && <Trash2 className="h-4 w-4 text-red-500" />}
+                {!trigger && <Trash2 className="h-4 w-4 text-destructive" />}
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
@@ -86,7 +86,7 @@ export function DeleteConfirmDialog({
 
                 <div className="space-y-4 py-4">
                     {children && (
-                        <div className="rounded-lg bg-stone-50 p-3 space-y-2 text-sm">
+                        <div className="rounded-lg bg-muted p-3 space-y-2 text-sm">
                             {children}
                         </div>
                     )}
@@ -95,7 +95,7 @@ export function DeleteConfirmDialog({
                         <FieldLabel htmlFor="confirmDelete">
                             {confirmLabel ?? (
                                 <span className="text-wrap">
-                                    Type <code className="rounded bg-stone-100 px-1 break-all">{confirmText}</code> to
+                                    Type <code className="rounded bg-muted px-1 break-all">{confirmText}</code> to
                                     confirm deletion:
                                 </span>
                             )}
@@ -114,7 +114,7 @@ export function DeleteConfirmDialog({
                     <AlertDialogAction
                         onClick={handleDelete}
                         disabled={!canDelete || isDeleting}
-                        className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+                        className="bg-destructive hover:bg-destructive/90 focus:ring-destructive"
                     >
                         {isDeleting ? "Deleting..." : "Delete"}
                     </AlertDialogAction>

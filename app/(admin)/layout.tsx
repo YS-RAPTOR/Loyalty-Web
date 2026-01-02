@@ -26,43 +26,47 @@ export default async function AdminLayout({
     const userIsAdmin = hasMinRoles(role, "admin");
 
     return (
-        <div className="min-h-screen bg-stone-50">
+        <div className="min-h-screen bg-background">
             {/* Skip link for accessibility */}
             <a
                 href="#main-content"
-                className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-4 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-stone-900 focus:shadow-lg focus:ring-2 focus:ring-stone-400"
+                className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-4 focus:rounded-md focus:bg-card focus:px-4 focus:py-2 focus:text-foreground focus:shadow-lg focus:ring-2 focus:ring-ring"
             >
                 Skip to main content
             </a>
 
             {/* Header */}
-            <header className="sticky top-0 z-40 border-b bg-white">
-                <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center gap-6 w-[40%]">
-                        <Link href="/admin" className="flex items-center gap-2 text-xl font-semibold">
-                            <Logo size="md" className="sm:hidden" />
-                            <Logo size="sm" className="hidden sm:block" />
-                            <span className="hidden sm:inline">{branding.adminName}</span>
+            <header className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-lg">
+                <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+                    {/* Left: Logo and Nav */}
+                    <div className="flex items-center gap-8">
+                        <Link href="/admin" className="flex items-center gap-2.5 font-semibold text-foreground">
+                            <Logo size="sm" />
+                            <span className="hidden sm:inline text-lg">{branding.adminName}</span>
                         </Link>
                         <AdminNav isAdmin={userIsAdmin} />
                     </div>
-                    <div className="flex items-center gap-4">
-                        <div className="text-sm text-stone-500 text-right">
-                            <span>{user?.firstName || user?.emailAddresses[0]?.emailAddress}</span>
+
+                    {/* Right: User info and avatar */}
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                             {role && (
-                                <span className="ml-2 sm:inline block mt-1 sm:mt-0 rounded bg-stone-100 px-2 py-0.5 text-xs font-medium text-stone-600">
+                                <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                                     {roleDisplayNames[role]}
                                 </span>
                             )}
+                            <span className="hidden text-sm font-medium text-foreground sm:inline">
+                                {user?.firstName || user?.emailAddresses[0]?.emailAddress}
+                            </span>
                         </div>
-                        <div className="[&_.cl-avatarBox]:!size-10 sm:[&_.cl-avatarBox]:!size-8">
+                        <div className="flex items-center [&_.cl-avatarBox]:size-8! [&_.cl-userButtonTrigger]:p-0!">
                             <UserButton />
                         </div>
                     </div>
                 </div>
 
                 {/* Mobile nav */}
-                <div className="border-t px-4 py-2 md:hidden">
+                <div className="border-t border-border/50 px-4 py-2 md:hidden">
                     <AdminNavMobile isAdmin={userIsAdmin} />
                 </div>
             </header>

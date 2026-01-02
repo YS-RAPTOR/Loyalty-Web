@@ -22,8 +22,8 @@ export function EmptyState({
 }: EmptyStateProps) {
     return (
         <Card className={className}>
-            <CardContent className="py-12 text-center text-stone-500">
-                {Icon && <Icon className="mx-auto mb-4 h-12 w-12 text-stone-300" />}
+            <CardContent className="py-12 text-center text-muted-foreground">
+                {Icon && <Icon className="mx-auto mb-4 h-12 w-12 text-muted-foreground/50" />}
                 <p>{title}</p>
                 {description && <p className="text-sm">{description}</p>}
                 {children}
@@ -43,7 +43,7 @@ interface LoadingCardProps {
 export function LoadingCard({ message = "Loading...", className }: LoadingCardProps) {
     return (
         <Card className={className}>
-            <CardContent className="py-8 text-center text-stone-500">
+            <CardContent className="py-8 text-center text-muted-foreground">
                 {message}
             </CardContent>
         </Card>
@@ -69,7 +69,7 @@ export function LoadingSpinner({ className, size = "md" }: LoadingSpinnerProps) 
         <div className={cn("flex items-center justify-center py-12", className)}>
             <div
                 className={cn(
-                    "animate-spin rounded-full border-b-2 border-stone-900",
+                    "animate-spin rounded-full border-b-2 border-foreground",
                     sizes[size]
                 )}
             />
@@ -87,8 +87,8 @@ interface LoadingSkeletonProps {
 export function LoadingSkeleton({ className }: LoadingSkeletonProps) {
     return (
         <div className={cn("space-y-6", className)}>
-            <div className="h-8 w-48 bg-stone-200 animate-pulse rounded" />
-            <div className="h-64 bg-stone-100 animate-pulse rounded-lg" />
+            <div className="h-8 w-48 bg-muted animate-pulse rounded" />
+            <div className="h-64 bg-muted/50 animate-pulse rounded-lg" />
         </div>
     );
 }

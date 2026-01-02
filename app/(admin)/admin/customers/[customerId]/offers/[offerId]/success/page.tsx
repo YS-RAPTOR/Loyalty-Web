@@ -62,19 +62,19 @@ export default function OfferSuccessPage({ params }: PageProps) {
         <div className="space-y-6 max-w-lg mx-auto">
             <BackLink href={`/admin/customers/${customerId}`}>Back to Customer</BackLink>
 
-            <Card className={requirementMet ? "border-amber-200 bg-amber-50" : "border-green-200 bg-green-50"}>
+            <Card className={requirementMet ? "border-amber-500/30 bg-amber-500/10" : "border-green-500/30 bg-green-500/10"}>
                 <CardHeader className="text-center pb-2">
-                    <div className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full ${requirementMet ? "bg-amber-100" : "bg-green-100"}`}>
+                    <div className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full ${requirementMet ? "bg-amber-500/20" : "bg-green-500/20"}`}>
                         {requirementMet ? (
-                            <Gift className="h-8 w-8 text-amber-600" />
+                            <Gift className="h-8 w-8 text-amber-400" />
                         ) : (
-                            <CheckCircle className="h-8 w-8 text-green-600" />
+                            <CheckCircle className="h-8 w-8 text-green-400" />
                         )}
                     </div>
-                    <CardTitle className={`text-2xl ${requirementMet ? "text-amber-800" : "text-green-800"}`}>
+                    <CardTitle className={`text-2xl ${requirementMet ? "text-amber-300" : "text-green-300"}`}>
                         {requirementMet ? "Reward Threshold Reached!" : "Event Logged Successfully!"}
                     </CardTitle>
-                    <CardDescription className={requirementMet ? "text-amber-700" : "text-green-700"}>
+                    <CardDescription className={requirementMet ? "text-amber-400" : "text-green-400"}>
                         {requirementMet && offer.effect.kind === "percent_off" ? (
                             <>
                                 Customer is eligible for{" "}
@@ -90,8 +90,8 @@ export default function OfferSuccessPage({ params }: PageProps) {
                 <CardContent className="space-y-6">
                     {/* Event ID */}
                     {eventId && (
-                        <div className="rounded-lg bg-white p-4 text-center">
-                            <p className="text-xs text-stone-500 uppercase tracking-wide mb-1">
+                        <div className="rounded-lg bg-card p-4 text-center">
+                            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
                                 Event ID
                             </p>
                             <p className="font-mono text-sm break-all">{eventId}</p>
@@ -99,30 +99,30 @@ export default function OfferSuccessPage({ params }: PageProps) {
                     )}
 
                     {/* Customer Info */}
-                    <div className="rounded-lg bg-white p-4">
-                        <p className="text-xs text-stone-500 uppercase tracking-wide mb-1">
+                    <div className="rounded-lg bg-card p-4">
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
                             Customer
                         </p>
                         <p className="font-medium">
                             {customer.firstName} {customer.lastName || ""}
                         </p>
-                        <p className="text-sm text-stone-500 font-mono">
+                        <p className="text-sm text-muted-foreground font-mono">
                             {customer.phoneE164}
                         </p>
                     </div>
 
                     {/* Offer Info */}
-                    <div className="rounded-lg bg-white p-4">
+                    <div className="rounded-lg bg-card p-4">
                         <div className="flex items-center gap-2 mb-2">
                             <ColorDot color={offer.color} />
                             <p className="font-medium">{offer.name}</p>
                         </div>
-                        <p className="text-sm text-stone-500 mb-3">{getOfferDescription(offer)}</p>
+                        <p className="text-sm text-muted-foreground mb-3">{getOfferDescription(offer)}</p>
 
                         {isFrequency && requiredCount ? (
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between text-sm">
-                                    <span className="text-stone-500">Progress</span>
+                                    <span className="text-muted-foreground">Progress</span>
                                     <span className="font-medium">
                                         {progress % requiredCount} / {requiredCount}
                                     </span>
@@ -134,11 +134,11 @@ export default function OfferSuccessPage({ params }: PageProps) {
                                     size="lg"
                                 />
                                 <div className="flex items-center justify-between text-sm">
-                                    <span className="text-stone-500">Total purchases</span>
+                                    <span className="text-muted-foreground">Total purchases</span>
                                     <span className="font-medium">{progress}</span>
                                 </div>
                                 <div className="flex items-center justify-between text-sm">
-                                    <span className="text-stone-500">Rewards earned</span>
+                                    <span className="text-muted-foreground">Rewards earned</span>
                                     <span className="font-medium">
                                         {Math.floor(progress / requiredCount)}
                                     </span>
@@ -146,7 +146,7 @@ export default function OfferSuccessPage({ params }: PageProps) {
                             </div>
                         ) : (
                             <div className="flex items-center gap-2 text-sm">
-                                <Ticket className="h-4 w-4 text-stone-400" />
+                                <Ticket className="h-4 w-4 text-muted-foreground" />
                                 <span>
                                     <span className="font-medium">{progress}</span> raffle{" "}
                                     {progress === 1 ? "entry" : "entries"}

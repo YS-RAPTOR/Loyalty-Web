@@ -222,7 +222,7 @@ export function QrScanner() {
             <CardContent>
                 <div className="space-y-4">
                     {/* Scanner container */}
-                    <div className="relative overflow-hidden rounded-lg bg-stone-100">
+                    <div className="relative overflow-hidden rounded-lg bg-muted">
                         <div 
                             id="qr-reader" 
                             className="w-full"
@@ -231,52 +231,52 @@ export function QrScanner() {
                         
                         {/* Overlay for different states */}
                         {(status === "idle" || status === "starting") && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-stone-100">
+                            <div className="absolute inset-0 flex items-center justify-center bg-muted">
                                 <div className="text-center space-y-2">
                                     <div className="animate-pulse">
-                                        <Camera className="mx-auto h-12 w-12 text-stone-400" />
+                                        <Camera className="mx-auto h-12 w-12 text-muted-foreground" />
                                     </div>
-                                    <p className="text-sm text-stone-500">Starting camera...</p>
+                                    <p className="text-sm text-muted-foreground">Starting camera...</p>
                                 </div>
                             </div>
                         )}
                         
                         {status === "success" && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-green-50/90">
+                            <div className="absolute inset-0 flex items-center justify-center bg-green-950/90">
                                 <div className="text-center space-y-2">
-                                    <div className="mx-auto w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                                        <Check className="w-6 h-6 text-green-600" />
+                                    <div className="mx-auto w-12 h-12 rounded-full bg-green-900 flex items-center justify-center">
+                                        <Check className="w-6 h-6 text-green-400" />
                                     </div>
-                                    <p className="text-sm font-medium text-green-700">QR Code Scanned!</p>
-                                    <p className="text-xs text-green-600">Redirecting to customer...</p>
+                                    <p className="text-sm font-medium text-green-300">QR Code Scanned!</p>
+                                    <p className="text-xs text-green-400">Redirecting to customer...</p>
                                 </div>
                             </div>
                         )}
                         
                         {status === "stopped" && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-stone-100">
+                            <div className="absolute inset-0 flex items-center justify-center bg-muted">
                                 <div className="text-center space-y-2">
-                                    <CameraOff className="mx-auto h-12 w-12 text-stone-400" />
-                                    <p className="text-sm text-stone-500">Scanner stopped</p>
+                                    <CameraOff className="mx-auto h-12 w-12 text-muted-foreground" />
+                                    <p className="text-sm text-muted-foreground">Scanner stopped</p>
                                 </div>
                             </div>
                         )}
                         
                         {status === "error" && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-stone-100">
+                            <div className="absolute inset-0 flex items-center justify-center bg-muted">
                                 <div className="text-center space-y-4 p-4 max-w-sm">
                                     {hasPermission === false ? (
                                         <>
-                                            <CameraOff className="mx-auto h-12 w-12 text-stone-400" />
+                                            <CameraOff className="mx-auto h-12 w-12 text-muted-foreground" />
                                             <div className="space-y-2">
-                                                <p className="text-sm font-medium text-stone-700">
+                                                <p className="text-sm font-medium text-foreground">
                                                     Camera Access Required
                                                 </p>
-                                                <p className="text-sm text-stone-600">
+                                                <p className="text-sm text-muted-foreground">
                                                     {errorMessage}
                                                 </p>
-                                                <div className="rounded-md bg-stone-50 p-3 text-left text-xs text-stone-500 space-y-1">
-                                                    <p className="font-medium text-stone-600">To enable camera access:</p>
+                                                <div className="rounded-md bg-background p-3 text-left text-xs text-muted-foreground space-y-1">
+                                                    <p className="font-medium text-foreground">To enable camera access:</p>
                                                     <ol className="list-decimal list-inside space-y-0.5">
                                                         <li>Click the lock or camera icon in the address bar</li>
                                                         <li>Find &quot;Camera&quot; in the permissions list</li>
@@ -288,8 +288,8 @@ export function QrScanner() {
                                         </>
                                     ) : (
                                         <>
-                                            <AlertCircle className="mx-auto h-12 w-12 text-red-400" />
-                                            <p className="text-sm text-stone-600">
+                                            <AlertCircle className="mx-auto h-12 w-12 text-destructive" />
+                                            <p className="text-sm text-muted-foreground">
                                                 {errorMessage}
                                             </p>
                                         </>
@@ -310,7 +310,7 @@ export function QrScanner() {
                     {/* Instructions */}
                     {status === "scanning" && (
                         <div className="text-center space-y-2">
-                            <p className="text-sm text-stone-500">
+                            <p className="text-sm text-muted-foreground">
                                 Position the QR code within the frame
                             </p>
                             <Button 
@@ -339,7 +339,7 @@ export function QrScanner() {
 
                     {/* Debug info in development */}
                     {scannedId && status === "success" && (
-                        <p className="text-xs text-stone-400 text-center font-mono">
+                        <p className="text-xs text-muted-foreground text-center font-mono">
                             ID: {scannedId}
                         </p>
                     )}

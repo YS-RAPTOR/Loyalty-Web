@@ -91,7 +91,7 @@ export default function EventsPage() {
                                             <div className="text-sm">
                                                 {formatDate(event.createdAt)}
                                             </div>
-                                            <div className="text-xs text-stone-500">
+                                            <div className="text-xs text-muted-foreground">
                                                 {formatTime(event.createdAt)}
                                             </div>
                                         </TableCell>
@@ -100,17 +100,17 @@ export default function EventsPage() {
                                                 <div>
                                                     <Link
                                                         href={`/admin/customers/${event.customerId}`}
-                                                        className="font-medium text-blue-600 hover:underline"
+                                                        className="font-medium text-primary hover:underline"
                                                     >
                                                         {event.customer.firstName}{" "}
                                                         {event.customer.lastName || ""}
                                                     </Link>
-                                                    <div className="text-xs text-stone-500 font-mono">
+                                                    <div className="text-xs text-muted-foreground font-mono">
                                                         {event.customer.phoneE164}
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <span className="text-stone-400">Deleted customer</span>
+                                                <span className="text-muted-foreground">Deleted customer</span>
                                             )}
                                         </TableCell>
                                         <TableCell>
@@ -120,7 +120,7 @@ export default function EventsPage() {
                                                     <span>{event.offer.name}</span>
                                                 </div>
                                             ) : (
-                                                <span className="text-stone-400">Deleted offer</span>
+                                                <span className="text-muted-foreground">Deleted offer</span>
                                             )}
                                         </TableCell>
                                         <TableCell>
@@ -141,13 +141,13 @@ export default function EventsPage() {
                                                             </div>
                                                         )}
                                                         {staff.email && (
-                                                            <div className="text-xs text-stone-500">
+                                                            <div className="text-xs text-muted-foreground">
                                                                 {staff.email}
                                                             </div>
                                                         )}
                                                     </div>
                                                 ) : (
-                                                    <span className="text-xs text-stone-500 font-mono">
+                                                    <span className="text-xs text-muted-foreground font-mono">
                                                         {event.createdByClerkUserId.slice(0, 8)}...
                                                     </span>
                                                 );
@@ -162,7 +162,7 @@ export default function EventsPage() {
                                                 onDelete={() => handleDelete(event._id)}
                                             >
                                                 <div className="flex items-center gap-2">
-                                                    <User className="h-4 w-4 text-stone-400" />
+                                                    <User className="h-4 w-4 text-muted-foreground" />
                                                     <span>
                                                         {event.customer
                                                             ? `${event.customer.firstName} ${event.customer.lastName || ""}`
@@ -170,11 +170,11 @@ export default function EventsPage() {
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                    <Gift className="h-4 w-4 text-stone-400" />
+                                                    <Gift className="h-4 w-4 text-muted-foreground" />
                                                     <span>{event.offer?.name || "Unknown offer"}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                    <Calendar className="h-4 w-4 text-stone-400" />
+                                                    <Calendar className="h-4 w-4 text-muted-foreground" />
                                                     <span>{new Date(event.createdAt).toLocaleString()}</span>
                                                 </div>
                                             </DeleteConfirmDialog>

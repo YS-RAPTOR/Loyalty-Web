@@ -97,8 +97,8 @@ export function TeamManagementTab() {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-6 w-6 animate-spin text-stone-500" />
-                <span className="ml-2 text-stone-500">Loading team members...</span>
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                <span className="ml-2 text-muted-foreground">Loading team members...</span>
             </div>
         );
     }
@@ -164,7 +164,7 @@ export function TeamManagementTab() {
                                         </SelectContent>
                                     </Select>
                                     {updatingRoles.has(user.id) && (
-                                        <Loader2 className="h-4 w-4 animate-spin text-stone-500" />
+                                        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                                     )}
                                 </div>
                             </TableCell>
@@ -177,11 +177,11 @@ export function TeamManagementTab() {
                                         onDelete={() => handleDelete(user.id)}
                                     >
                                         <div className="flex items-center gap-2">
-                                            <User className="h-4 w-4 text-stone-400" />
+                                            <User className="h-4 w-4 text-muted-foreground" />
                                             <span>{getUserDisplayName(user)}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <Mail className="h-4 w-4 text-stone-400" />
+                                            <Mail className="h-4 w-4 text-muted-foreground" />
                                             <span>{user.email || "No email"}</span>
                                         </div>
                                     </DeleteConfirmDialog>

@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
     return (
         <ClerkProvider>
-            <html lang="en" className={inter.variable}>
+            <html lang="en" className={`${inter.variable} dark`}>
                 <body
                     className={`${geistSans.variable} ${geistMono.variable} antialiased`}
                 >

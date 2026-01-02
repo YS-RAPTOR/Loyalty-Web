@@ -167,11 +167,17 @@ export const getCustomerProgress = query({
                 requirementMet = progress > 0 && progress % requiredCount === 0;
             }
 
+            // Show "Reward Ready!" badge when next purchase will earn the reward
+            const showReadyBadge = offer.rule.kind === "frequency" && requiredCount !== null
+                ? progress % requiredCount === requiredCount - 1
+                : false;
+
             return {
                 offer,
                 progress,
                 requiredCount,
                 requirementMet,
+                showReadyBadge,
             };
         });
     },

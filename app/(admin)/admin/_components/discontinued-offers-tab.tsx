@@ -23,7 +23,7 @@ interface DiscontinuedOffersTabProps {
 
 export function DiscontinuedOffersTab({ offers, onRestart }: DiscontinuedOffersTabProps) {
     if (offers === undefined) {
-        return <div className="text-center py-8 text-stone-500">Loading...</div>;
+        return <div className="text-center py-8 text-muted-foreground">Loading...</div>;
     }
 
     if (offers.length === 0) {
@@ -49,15 +49,15 @@ export function DiscontinuedOffersTab({ offers, onRestart }: DiscontinuedOffersT
                             <TableCell>
                                 <div className="flex items-center justify-center gap-2">
                                     <ColorDot color={offer.color} muted />
-                                    <span className="font-medium text-stone-500">
+                                    <span className="font-medium text-muted-foreground">
                                         {offer.name}
                                     </span>
                                 </div>
                             </TableCell>
-                            <TableCell className="text-stone-500">
+                            <TableCell className="text-muted-foreground">
                                 {formatRule(offer.rule)}
                             </TableCell>
-                            <TableCell className="text-stone-500">
+                            <TableCell className="text-muted-foreground">
                                 {offer.discontinuedAt
                                     ? formatDate(offer.discontinuedAt)
                                     : "-"}

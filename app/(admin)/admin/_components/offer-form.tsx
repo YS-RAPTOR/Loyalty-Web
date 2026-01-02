@@ -146,7 +146,7 @@ export function OfferForm({
                             defaultValue={formData.color}
                             onInput={handleColorInput}
                             onBlur={handleColorBlur}
-                            className="h-11 w-14 cursor-pointer rounded border border-stone-200 p-1"
+                            className="h-11 w-14 cursor-pointer rounded border border-border p-1"
                         />
                         <input
                             ref={hexInputRef}

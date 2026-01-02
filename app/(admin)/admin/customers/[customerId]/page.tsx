@@ -56,6 +56,7 @@ function OfferProgressCard({
     progress,
     requiredCount,
     requirementMet,
+    showReadyBadge,
     onLog,
     isLogging,
 }: {
@@ -70,6 +71,7 @@ function OfferProgressCard({
     progress: number;
     requiredCount: number | null;
     requirementMet: boolean;
+    showReadyBadge: boolean;
     onLog: () => void;
     isLogging: boolean;
 }) {
@@ -86,8 +88,8 @@ function OfferProgressCard({
             <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{offer.name}</CardTitle>
-                    {requirementMet && (
-                        <Badge variant="secondary" className="bg-green-100 text-green-700">
+                    {showReadyBadge && (
+                        <Badge variant="secondary" className="bg-green-500/20 text-green-400">
                             Reward Ready!
                         </Badge>
                     )}
@@ -109,7 +111,7 @@ function OfferProgressCard({
                             color={offer.color}
                         />
                         {progress > 0 && (
-                            <p className="text-xs text-stone-500">
+                            <p className="text-xs text-muted-foreground">
                                 Total purchases: {progress} | Rewards earned:{" "}
                                 {Math.floor(progress / requiredCount)}
                             </p>
@@ -119,7 +121,7 @@ function OfferProgressCard({
 
                 {isRaffle && (
                     <div className="flex items-center gap-2">
-                        <Ticket className="h-4 w-4 text-stone-400" />
+                        <Ticket className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">
                             <span className="font-medium">{progress}</span> raffle{" "}
                             {progress === 1 ? "entry" : "entries"}
@@ -472,11 +474,11 @@ export default function CustomerPage({ params }: PageProps) {
                 <CardContent className="space-y-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="flex items-center gap-3">
-                            <Phone className="h-4 w-4 text-stone-400 shrink-0" />
+                            <Phone className="h-4 w-4 text-muted-foreground shrink-0" />
                             <span className="font-mono">{customer.phoneE164}</span>
                         </div>
                         <div className="flex items-center gap-3">
-                            <Mail className="h-4 w-4 text-stone-400 shrink-0" />
+                            <Mail className="h-4 w-4 text-muted-foreground shrink-0" />
                             <span className="truncate">{customer.email || "No email"}</span>
                         </div>
                     </div>
@@ -485,7 +487,7 @@ export default function CustomerPage({ params }: PageProps) {
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div>
                             <p className="text-sm font-medium">QR Code</p>
-                            <p className="text-xs text-stone-500">
+                            <p className="text-xs text-muted-foreground">
                                 View or send the customer their QR code
                             </p>
                         </div>
@@ -524,13 +526,14 @@ export default function CustomerPage({ params }: PageProps) {
                     <EmptyState title="No active offers available" />
                 ) : (
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        {offerProgress.map(({ offer, progress, requiredCount, requirementMet }) => (
+                        {offerProgress.map(({ offer, progress, requiredCount, requirementMet, showReadyBadge }) => (
                             <OfferProgressCard
                                 key={offer._id}
                                 offer={offer}
                                 progress={progress}
                                 requiredCount={requiredCount}
                                 requirementMet={requirementMet}
+                                showReadyBadge={showReadyBadge}
                                 onLog={() => handleLogEvent(offer._id)}
                                 isLogging={loggingOfferId === offer._id}
                             />

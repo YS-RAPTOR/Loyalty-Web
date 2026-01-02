@@ -24,7 +24,7 @@ interface ActiveOffersTabProps {
 
 export function ActiveOffersTab({ offers, onEdit, onDiscontinue }: ActiveOffersTabProps) {
     if (offers === undefined) {
-        return <div className="text-center py-8 text-stone-500">Loading...</div>;
+        return <div className="text-center py-8 text-muted-foreground">Loading...</div>;
     }
 
     if (offers.length === 0) {
@@ -72,7 +72,7 @@ export function ActiveOffersTab({ offers, onEdit, onDiscontinue }: ActiveOffersT
                                     size="icon"
                                     onClick={() => onDiscontinue(offer._id)}
                                 >
-                                    <Ban className="h-4 w-4 text-red-500" />
+                                    <Ban className="h-4 w-4 text-destructive" />
                                 </Button>
                             </TableCell>
                         </TableRow>

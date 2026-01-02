@@ -28,7 +28,7 @@ export function ProgressBar({
     return (
         <div
             className={cn(
-                "rounded-full bg-stone-200 overflow-hidden",
+                "rounded-full bg-muted overflow-hidden",
                 heights[size],
                 className
             )}

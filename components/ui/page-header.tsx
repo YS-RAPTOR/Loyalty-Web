@@ -26,7 +26,7 @@ export function PageHeader({
             <div>
                 <h1 className="text-xl font-bold sm:text-2xl">{title}</h1>
                 {description && (
-                    <p className="text-sm text-stone-500 sm:text-base">{description}</p>
+                    <p className="text-sm text-muted-foreground sm:text-base">{description}</p>
                 )}
             </div>
             {children}

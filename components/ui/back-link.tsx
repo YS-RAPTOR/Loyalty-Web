@@ -22,7 +22,7 @@ export function BackLink({ href, back, children, className }: BackLinkProps) {
     const router = useRouter();
 
     const linkClassName = cn(
-        "inline-flex items-center text-sm text-stone-500 hover:text-stone-700 cursor-pointer",
+        "inline-flex items-center text-sm text-muted-foreground hover:text-foreground cursor-pointer",
         className
     );
 

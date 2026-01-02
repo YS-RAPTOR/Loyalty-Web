@@ -49,7 +49,7 @@ export default function SearchPage() {
             />
 
             <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                     type="text"
                     placeholder="Search customers..."
@@ -86,7 +86,7 @@ export default function SearchPage() {
                                     <TableCell>
                                         <Link
                                             href={`/admin/customers/${customer._id}`}
-                                            className="font-medium text-blue-600 hover:underline"
+                                            className="font-medium text-primary hover:underline"
                                         >
                                             {customer.firstName}{" "}
                                             {customer.lastName || ""}
@@ -95,10 +95,10 @@ export default function SearchPage() {
                                     <TableCell className="font-mono text-sm">
                                         {customer.phoneE164}
                                     </TableCell>
-                                    <TableCell className="text-stone-500">
+                                    <TableCell className="text-muted-foreground">
                                         {customer.email || "-"}
                                     </TableCell>
-                                    <TableCell className="text-stone-500">
+                                    <TableCell className="text-muted-foreground">
                                         {formatDate(customer.createdAt)}
                                     </TableCell>
                                 </TableRow>
@@ -109,7 +109,7 @@ export default function SearchPage() {
             )}
 
             {results && results.length >= 50 && (
-                <p className="text-center text-sm text-stone-500">
+                <p className="text-center text-sm text-muted-foreground">
                     Showing first 50 results. Refine your search for more specific results.
                 </p>
             )}

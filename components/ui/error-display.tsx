@@ -25,13 +25,13 @@ export function ErrorDisplay({
     return (
         <div className={`flex flex-col items-center justify-center p-4 ${className}`}>
             <div className="mx-auto max-w-md text-center">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
-                    <AlertCircle className="h-6 w-6 text-red-600" />
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
+                    <AlertCircle className="h-6 w-6 text-destructive" />
                 </div>
-                <h1 className="mb-2 text-xl font-semibold text-gray-900">
+                <h1 className="mb-2 text-xl font-semibold text-foreground">
                     {title}
                 </h1>
-                <p className="mb-6 text-sm text-gray-600">
+                <p className="mb-6 text-sm text-muted-foreground">
                     {description}
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
@@ -41,7 +41,7 @@ export function ErrorDisplay({
                     </Button>
                 </div>
                 {error.digest && (
-                    <p className="mt-4 text-xs text-gray-400">
+                    <p className="mt-4 text-xs text-muted-foreground/70">
                         Error ID: {error.digest}
                     </p>
                 )}
