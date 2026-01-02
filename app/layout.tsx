@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { shadcn } from "@clerk/themes";
 import { ConvexClientProvider } from "@/components/convex-client-provider";
 import { clientConfig } from "@/lib/config";
 import { branding } from "@/lib/branding";
@@ -33,7 +34,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <ClerkProvider>
+        <ClerkProvider appearance={{ baseTheme: shadcn }}>
             <html lang="en" className={`${inter.variable} dark`}>
                 <body
                     className={`${geistSans.variable} ${geistMono.variable} antialiased`}
