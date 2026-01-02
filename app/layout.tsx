@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     metadataBase: new URL(clientConfig.appUrl),
     title: branding.appName,
     description: branding.meta.description,
+    icons: {
+        icon: "/logo.png",
+    },
 };
 
 export default function RootLayout({
