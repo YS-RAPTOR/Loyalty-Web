@@ -1,6 +1,6 @@
 import { RateLimiter, MINUTE, HOUR } from "@convex-dev/rate-limiter";
 import { components } from "./_generated/api";
-import { mutation, query } from "./_generated/server";
+import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const rateLimiter = new RateLimiter(components.rateLimiter, {
@@ -26,14 +26,6 @@ export const rateLimiter = new RateLimiter(components.rateLimiter, {
         rate: 5,
         period: HOUR,
         capacity: 5,
-    },
-
-    // QR code generation: 60 per minute per identifier
-    qrGeneration: {
-        kind: "token bucket",
-        rate: 60,
-        period: MINUTE,
-        capacity: 60,
     },
 });
 
@@ -86,38 +78,6 @@ export const checkCustomerCreationLimit = mutation({
     args: { identifier: v.string() },
     handler: async (ctx, args) => {
         const result = await rateLimiter.limit(ctx, "customerCreation", {
-            key: args.identifier,
-        });
-        return {
-            ok: result.ok,
-            retryAfter: result.retryAfter,
-        };
-    },
-});
-
-/**
- * Check rate limit for QR generation (query-only, doesn't consume)
- */
-export const checkQrGenerationLimit = query({
-    args: { identifier: v.string() },
-    handler: async (ctx, args) => {
-        const result = await rateLimiter.check(ctx, "qrGeneration", {
-            key: args.identifier,
-        });
-        return {
-            ok: result.ok,
-            retryAfter: result.retryAfter,
-        };
-    },
-});
-
-/**
- * Consume rate limit for QR generation
- */
-export const consumeQrGenerationLimit = mutation({
-    args: { identifier: v.string() },
-    handler: async (ctx, args) => {
-        const result = await rateLimiter.limit(ctx, "qrGeneration", {
             key: args.identifier,
         });
         return {
