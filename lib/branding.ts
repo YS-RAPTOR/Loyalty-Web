@@ -103,6 +103,24 @@ export const branding = {
             `Your TripleTCafe QR code is ready! View it here: ${qrUrl}`,
     },
 
+    /** Home page branding */
+    home: {
+        /** Welcome heading */
+        heading: "Welcome to TripleTCafe",
+
+        /** Customer section text */
+        customerText: "Join our loyalty program and earn rewards with every visit.",
+
+        /** Customer CTA button text */
+        customerCta: "Register for Rewards",
+
+        /** Staff section text */
+        staffText: "Staff members can sign in below or ask your manager for an invitation to sign up.",
+
+        /** Staff CTA button text */
+        staffCta: "Staff Sign In",
+    },
+
     /** Error page branding */
     errors: {
         /** Generic error title */
