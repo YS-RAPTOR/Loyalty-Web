@@ -204,15 +204,24 @@ export function OfferForm({
                             <Input
                                 id="requiredCount"
                                 type="number"
+                                inputMode="numeric"
                                 min="1"
                                 value={formData.requiredCount}
                                 onChange={(e) => {
+                                    const value = e.target.value;
+                                    const parsed = parseInt(value);
                                     setFormData({
                                         ...formData,
-                                        requiredCount: parseInt(e.target.value) || 1,
+                                        requiredCount: value === "" ? ("" as unknown as number) : (isNaN(parsed) ? formData.requiredCount : parsed),
                                     });
                                     if (fieldErrors.requiredCount) {
                                         setFieldErrors({ ...fieldErrors, requiredCount: undefined });
+                                    }
+                                }}
+                                onBlur={(e) => {
+                                    const parsed = parseInt(e.target.value);
+                                    if (isNaN(parsed) || parsed < 1) {
+                                        setFormData({ ...formData, requiredCount: 1 });
                                     }
                                 }}
                                 disabled={isEditMode}
@@ -231,16 +240,27 @@ export function OfferForm({
                             <Input
                                 id="percent"
                                 type="number"
+                                inputMode="numeric"
                                 min="1"
                                 max="100"
                                 value={formData.percent}
                                 onChange={(e) => {
+                                    const value = e.target.value;
+                                    const parsed = parseInt(value);
                                     setFormData({
                                         ...formData,
-                                        percent: parseInt(e.target.value) || 100,
+                                        percent: value === "" ? ("" as unknown as number) : (isNaN(parsed) ? formData.percent : parsed),
                                     });
                                     if (fieldErrors.percent) {
                                         setFieldErrors({ ...fieldErrors, percent: undefined });
+                                    }
+                                }}
+                                onBlur={(e) => {
+                                    const parsed = parseInt(e.target.value);
+                                    if (isNaN(parsed) || parsed < 1) {
+                                        setFormData({ ...formData, percent: 100 });
+                                    } else if (parsed > 100) {
+                                        setFormData({ ...formData, percent: 100 });
                                     }
                                 }}
                                 aria-invalid={!!fieldErrors.percent}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "convex/react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useState } from "react";
 import { api } from "@/convex/_generated/api";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,20 +20,8 @@ import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { formatDate } from "@/lib/date";
 
 export default function SearchPage() {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const searchQuery = searchParams.get("q") || "";
+    const [searchQuery, setSearchQuery] = useState("");
     const debouncedQuery = useDebouncedValue(searchQuery);
-
-    const handleSearchChange = (value: string) => {
-        const params = new URLSearchParams(searchParams);
-        if (value) {
-            params.set("q", value);
-        } else {
-            params.delete("q");
-        }
-        router.replace(`/admin/search?${params.toString()}`);
-    };
 
     // Use full-text search index
     const results = useQuery(
@@ -54,7 +42,7 @@ export default function SearchPage() {
                     type="text"
                     placeholder="Search customers..."
                     value={searchQuery}
-                    onChange={(e) => handleSearchChange(e.target.value)}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10"
                 />
             </div>
