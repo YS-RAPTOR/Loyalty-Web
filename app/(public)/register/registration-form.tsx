@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,8 @@ import { Logo } from "@/components/ui/logo";
 
 type Step = "info" | "otp" | "already-registered";
 
+const RESEND_COOLDOWN_SECONDS = 30;
+
 interface FormErrors {
     phone?: string;
     firstName?: string;
@@ -51,6 +53,24 @@ export function RegistrationForm() {
     const [error, setError] = useState("");
     const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
     const [isLoading, setIsLoading] = useState(false);
+    const [isResending, setIsResending] = useState(false);
+    const [resendCooldown, setResendCooldown] = useState(0);
+
+    // Countdown timer for resend cooldown
+    useEffect(() => {
+        if (resendCooldown <= 0) return;
+
+        const timer = setInterval(() => {
+            setResendCooldown((prev) => prev - 1);
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [resendCooldown]);
+
+    // Start cooldown when entering OTP step
+    const startResendCooldown = useCallback(() => {
+        setResendCooldown(RESEND_COOLDOWN_SECONDS);
+    }, []);
 
     const validateForm = (): boolean => {
         const result = registrationSchema.safeParse({
@@ -101,10 +121,34 @@ export function RegistrationForm() {
 
             setPhoneE164(result.phoneE164!);
             setStep("otp");
+            startResendCooldown();
         } catch {
             setError("Something went wrong. Please try again.");
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleResendOtp = async () => {
+        if (resendCooldown > 0 || isResending) return;
+
+        setError("");
+        setIsResending(true);
+
+        try {
+            const result = await sendOtpAction(phoneE164);
+
+            if (!result.success) {
+                setError(result.error || "Failed to resend OTP");
+                return;
+            }
+
+            setOtpCode("");
+            startResendCooldown();
+        } catch {
+            setError("Something went wrong. Please try again.");
+        } finally {
+            setIsResending(false);
         }
     };
 
@@ -235,12 +279,31 @@ export function RegistrationForm() {
                         </Button>
                         <Button
                             type="button"
+                            variant="secondary"
+                            className="w-full"
+                            onClick={handleResendOtp}
+                            disabled={resendCooldown > 0 || isResending}
+                        >
+                            {isResending ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Resending...
+                                </>
+                            ) : resendCooldown > 0 ? (
+                                `Resend code in ${resendCooldown}s`
+                            ) : (
+                                "Resend code"
+                            )}
+                        </Button>
+                        <Button
+                            type="button"
                             variant="ghost"
                             className="w-full"
                             onClick={() => {
                                 setStep("info");
                                 setOtpCode("");
                                 setError("");
+                                setResendCooldown(0);
                             }}
                         >
                             <ArrowLeft className="mr-2 h-4 w-4" />
