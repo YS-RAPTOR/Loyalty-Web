@@ -56,7 +56,10 @@ export const registrationSchema = z.object({
     lastName: optionalNameSchema,
     email: optionalEmailSchema,
     acceptedTerms: z.literal(true, {
-        error: "You must accept the terms and conditions",
+        error: "You must accept the privacy policy",
+    }),
+    acceptedPromotionTerms: z.literal(true, {
+        error: "You must accept the promotion terms & conditions",
     }),
 });
 

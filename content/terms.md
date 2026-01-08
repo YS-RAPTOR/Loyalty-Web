@@ -1,41 +1,92 @@
-# Terms and Conditions
+# Triple T Café – Privacy Policy
 
-## 1. Acceptance of Terms
+**Effective Date: 8 January 2026**
 
-By registering for our loyalty program, you agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not register.
+Triple T Café is committed to protecting your privacy and handling personal information in accordance with the Privacy Act 1988 (Cth) and the Australian Privacy Principles (APPs).
 
-## 2. Program Description
+## 1. Information We Collect
 
-Our loyalty program allows registered members to earn rewards through qualifying purchases. Rewards and offers are subject to change at our discretion.
+We may collect:
 
-## 3. Eligibility
+- Full name
+- Email address
+- Phone number
+- Purchase and transaction details
+- Promotion entry information
+- Any information voluntarily provided via forms or website
 
-The program is open to individuals who are at least 18 years of age and reside in Australia. Each person may only register one account.
+## 2. How We Collect Information
 
-## 4. Personal Information
+Information is collected when you:
 
-We collect your phone number, name, and optionally your email address to operate the loyalty program. Your information will be handled in accordance with our Privacy Policy.
+- Place an online or in-store order
+- Enter a promotion or competition
+- Complete a QR or website entry form
+- Contact us directly
 
-## 5. Communications
+## 3. How We Use Your Information
 
-By registering, you consent to receive SMS messages related to the loyalty program, including verification codes, welcome messages, and QR code links.
+Your personal information is used to:
 
-## 6. QR Code
+- Administer promotions and prize draws
+- Contact winners
+- Process transactions
+- Improve services and customer experience
+- Meet legal and regulatory requirements
 
-Your unique QR code is for personal use only and should not be shared with others. You are responsible for keeping your QR code secure.
+## 4. Marketing Communications
 
-## 7. Program Changes
+- Marketing communications are sent only if you opt in
+- You may unsubscribe at any time via:
+  - Email unsubscribe link
+  - Direct contact
 
-We reserve the right to modify, suspend, or terminate the loyalty program at any time without prior notice.
+## 5. Data Storage & Security
 
-## 8. Limitation of Liability
+We take reasonable steps to protect your information using:
 
-We are not liable for any indirect, incidental, or consequential damages arising from your participation in the loyalty program.
+- Secure systems and platforms
+- Restricted access controls
+- Confidential handling procedures
 
-## 9. Governing Law
+While we strive to protect your data, no electronic system is completely secure.
 
-These terms are governed by the laws of Australia. Any disputes will be resolved in the courts of Australia.
+## 6. Disclosure of Information
 
-## 10. Contact
+We do not sell or rent personal information.
 
-If you have any questions about these Terms and Conditions, please contact us.
+Information may be disclosed:
+
+- To trusted service providers (e.g. IT or booking partners)
+- To Jetstar solely for ticket fulfilment if you win
+- When required by law
+
+## 7. Access & Correction
+
+You may request:
+
+- Access to your personal information
+- Correction of inaccurate or outdated information
+
+## 8. Data Retention
+
+Personal information is retained only as long as necessary to:
+
+- Conduct the promotion
+- Meet legal and business obligations
+
+## 9. Complaints
+
+If you believe your privacy has been breached, contact us directly.
+
+Unresolved complaints may be referred to the Office of the Australian Information Commissioner (OAIC).
+
+## 10. Contact Us
+
+For privacy or promotion-related enquiries:
+
+Email: info@amconsultants.com.au
+
+## 11. Updates to This Policy
+
+This Privacy Policy may be updated periodically. The most current version will be available on our website.

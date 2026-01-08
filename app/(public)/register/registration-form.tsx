@@ -2,10 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { TermsCheckbox } from "@/components/ui/terms-checkbox";
 import {
     InputOTP,
     InputOTPGroup,
@@ -38,6 +37,7 @@ interface FormErrors {
     lastName?: string;
     email?: string;
     acceptedTerms?: string;
+    acceptedPromotionTerms?: string;
 }
 
 export function RegistrationForm() {
@@ -49,6 +49,7 @@ export function RegistrationForm() {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [acceptedTerms, setAcceptedTerms] = useState(false);
+    const [acceptedPromotionTerms, setAcceptedPromotionTerms] = useState(false);
     const [otpCode, setOtpCode] = useState("");
     const [error, setError] = useState("");
     const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
@@ -79,6 +80,7 @@ export function RegistrationForm() {
             lastName: lastName || undefined,
             email: email || undefined,
             acceptedTerms,
+            acceptedPromotionTerms,
         });
 
         if (!result.success) {
@@ -404,29 +406,33 @@ export function RegistrationForm() {
                             {fieldErrors.email && <FieldError>{fieldErrors.email}</FieldError>}
                         </Field>
 
-                        <div className="flex items-center gap-3">
-                            <Checkbox
-                                id="terms"
-                                checked={acceptedTerms}
-                                onCheckedChange={(checked) => {
-                                    setAcceptedTerms(checked === true);
-                                    if (fieldErrors.acceptedTerms) {
-                                        setFieldErrors({ ...fieldErrors, acceptedTerms: undefined });
-                                    }
-                                }}
-                                className="shrink-0"
-                            />
-                            <label htmlFor="terms" className="text-sm">
-                                I accept the{" "}
-                                <Link
-                                    href="/terms"
-                                    className="text-primary underline hover:text-primary/80"
-                                >
-                                    Terms and Conditions
-                                </Link>
-                            </label>
-                        </div>
+                        <TermsCheckbox
+                            id="terms"
+                            checked={acceptedTerms}
+                            onCheckedChange={(checked) => {
+                                setAcceptedTerms(checked);
+                                if (fieldErrors.acceptedTerms) {
+                                    setFieldErrors({ ...fieldErrors, acceptedTerms: undefined });
+                                }
+                            }}
+                            href="/terms"
+                            label="Privacy Policy"
+                        />
                         {fieldErrors.acceptedTerms && <FieldError>{fieldErrors.acceptedTerms}</FieldError>}
+
+                        <TermsCheckbox
+                            id="promotionTerms"
+                            checked={acceptedPromotionTerms}
+                            onCheckedChange={(checked) => {
+                                setAcceptedPromotionTerms(checked);
+                                if (fieldErrors.acceptedPromotionTerms) {
+                                    setFieldErrors({ ...fieldErrors, acceptedPromotionTerms: undefined });
+                                }
+                            }}
+                            href="/promotion-terms"
+                            label="Promotion Terms & Conditions"
+                        />
+                        {fieldErrors.acceptedPromotionTerms && <FieldError>{fieldErrors.acceptedPromotionTerms}</FieldError>}
 
                         {error && <FieldError>{error}</FieldError>}
                     </FieldGroup>
