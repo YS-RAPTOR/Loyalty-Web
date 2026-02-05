@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, LabelList } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
+import { TruncatedAxisTick } from "./truncated-axis-tick";
 
 const BAR_HEIGHT = 40;
 const CHART_PADDING = 20;
@@ -53,8 +54,8 @@ export function HorizontalBarChart({
                     tickLine={false}
                     axisLine={false}
                     width={yAxisWidth}
-                    tick={{ fontSize: 12 }}
                     interval={0}
+                    tick={(props) => <TruncatedAxisTick {...props} width={yAxisWidth} />}
                 />
                 <XAxis type="number" hide />
                 <ChartTooltip

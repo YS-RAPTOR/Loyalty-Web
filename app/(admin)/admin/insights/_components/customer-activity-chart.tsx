@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, LabelList } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from "@/components/ui/chart";
+import { TruncatedAxisTick } from "./truncated-axis-tick";
 
 const BAR_HEIGHT = 40;
 const CHART_PADDING = 20;
@@ -71,32 +72,17 @@ export function CustomerActivityChart({
                     tickLine={false}
                     axisLine={false}
                     width={120}
-                    tick={({ x, y, payload, index }) => {
-                        const customer = data[index];
-                        const isDeleted = payload.value === "Deleted Customer";
-                        const displayName = payload.value.length > 18
-                            ? payload.value.slice(0, 18) + "..."
-                            : payload.value;
+                    tick={(props) => {
+                        const customer = data[props.index];
+                        const isDeleted = props.payload.value === "Deleted Customer";
                         return (
-                            <g transform={`translate(${x},${y})`}>
-                                <text
-                                    x={-4}
-                                    y={0}
-                                    dy={4}
-                                    textAnchor="end"
-                                    className={isDeleted
-                                        ? "fill-muted-foreground text-xs"
-                                        : "fill-primary text-xs cursor-pointer"
-                                    }
-                                    style={isDeleted ? undefined : { textDecoration: "underline" }}
-                                    onClick={isDeleted ? undefined : (e) => {
-                                        e.stopPropagation();
-                                        customer && handleCustomerClick(customer.customerId);
-                                    }}
-                                >
-                                    {displayName}
-                                </text>
-                            </g>
+                            <TruncatedAxisTick
+                                {...props}
+                                width={120}
+                                isClickable={!isDeleted}
+                                isMuted={isDeleted}
+                                onClick={() => customer && handleCustomerClick(customer.customerId)}
+                            />
                         );
                     }}
                 />
