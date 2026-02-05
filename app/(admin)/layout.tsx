@@ -39,7 +39,11 @@ export default async function AdminLayout({
             <header className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-lg">
                 <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                     {/* Left: Logo and Nav */}
-                    <div className="flex items-center gap-8">
+                    <div className="flex items-center gap-4 md:gap-8">
+                        {/* Mobile menu */}
+                        <div className="md:hidden">
+                            <AdminNavMobile isAdmin={userIsAdmin} />
+                        </div>
                         <Link href="/admin" className="flex items-center gap-2.5 font-semibold text-foreground">
                             <Logo size="sm" />
                             <span className="hidden sm:inline text-lg">{branding.adminName}</span>
@@ -63,11 +67,6 @@ export default async function AdminLayout({
                             <UserButton />
                         </div>
                     </div>
-                </div>
-
-                {/* Mobile nav */}
-                <div className="border-t border-border/50 px-4 py-2 md:hidden">
-                    <AdminNavMobile isAdmin={userIsAdmin} />
                 </div>
             </header>
 

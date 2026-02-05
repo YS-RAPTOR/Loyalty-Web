@@ -16,6 +16,7 @@ const isPublicRoute = createRouteMatcher([
 const isAdminRoute = createRouteMatcher([
     "/admin",
     "/admin/events(.*)",
+    "/admin/insights(.*)",
     "/admin/offers/discontinued(.*)",
 ]);
 const isTrustedStaffRoute = createRouteMatcher([

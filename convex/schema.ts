@@ -37,6 +37,7 @@ export default defineSchema({
         updatedAt: v.number(),
     })
         .index("by_phone", ["phoneE164"])
+        .index("by_createdAt", ["createdAt"])
         .searchIndex("search_customers", {
             searchField: "searchText",
         }),
